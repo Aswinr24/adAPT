@@ -1,0 +1,20 @@
+{
+  "title": "Internal Reconnaissance - Port/Network Scans",
+  "description": "Detect internal network scanning behavior such as frequent connection attempts to many internal hosts/ports from a single source.",
+  "index": "packetbeat-*",
+  "query": {
+    "bool": {
+      "must": [
+        { "range": { "@timestamp": { "gte": "now-5m" } } },
+        { "term": { "event.action": "connection_attempt" } }
+      ],
+      "filter": [
+        {
+          "script": {
+            "script": "doc['destination.ip.keyword'].length > 10"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "title": "Potential Lateral Movement - Remote Service Execution",
+  "description": "Detect known remote service execution tools and usage patterns (PsExec, WMI Exec, WinRM) used for lateral movement.",
+  "index": "winlogbeat-*",
+  "query": {
+    "bool": {
+      "should": [
+        { "match_phrase": { "process.command_line": "psexec" } },
+        { "match_phrase": { "process.command_line": "winrm" } },
+        { "match_phrase": { "process.command_line": "wmic" } },
+        { "match_phrase": { "process.command_line": "Invoke-Command" } }
+      ],
+      "minimum_should_match": 1
+    }
+  }
+}

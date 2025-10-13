@@ -1,0 +1,13 @@
+{
+  "title": "Suspicious PowerShell Command Line",
+  "description": "Detect common suspicious PowerShell flags and encoded commands",
+  "index": "winlogbeat-*",
+  "query": {
+    "bool": {
+      "must": [
+        { "match": { "process.name": "powershell.exe" } },
+        { "multi_match": { "query": "-nop -w hidden -encodedcommand IEX DownloadString Invoke-Expression", "fields": ["process.command_line", "message"] } }
+      ]
+    }
+  }
+}
