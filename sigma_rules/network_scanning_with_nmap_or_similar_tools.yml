@@ -7,10 +7,10 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.ta0043
-- attack.t1592
 - MITRE
 - attack.reconnaissance
+- attack.ta0043
+- attack.t1592
 level: medium
 logsource:
   category: process_creation
@@ -21,9 +21,8 @@ logsource:
   - zeek-*
 detection:
   selection:
-    keywords:
-    - "event.category: process AND event.type: start AND\n(\n  process.name: (\n \
-      \   \"nmap\" OR \"masscan\" OR \"zmap\" OR \"unicornscan\" OR\n    \"nmap.exe\"\
+    kql_query: "event.category: process AND event.type: start AND\n(\n  process.name:\
+      \ (\n    \"nmap\" OR \"masscan\" OR \"zmap\" OR \"unicornscan\" OR\n    \"nmap.exe\"\
       \ OR \"masscan.exe\" OR \"angry_ip_scanner.exe\" OR\n    \"Advanced Port Scanner.exe\"\
       \n  )\n  OR\n  process.command_line: (\n    \"*port*scan*\" OR \"*host*discovery*\"\
       \ OR \"*-sS*\" OR \"*-sT*\" OR \"*-sU*\" OR\n    \"*-sV*\" OR \"*-O*\" OR \"\

@@ -10,12 +10,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.discovery
-- Windows
-- MITRE
 - attack.ta0007
-- attack.t1033
+- MITRE
 - APT29
+- attack.t1033
+- Windows
+- attack.discovery
 level: low
 logsource:
   category: process_creation
@@ -24,15 +24,15 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type: \"windows\" and\n(\n  (\n    event.category: process and process.name:\
-      \ \"cmd.exe\" and \n    (\n      process.command_line : \"*%USERNAME%*\" or\n\
-      \      process.command_line : \"*%USERDOMAIN%*\" or\n      process.command_line\
-      \ : \"*%USERPROFILE%*\"\n    )\n  ) or\n\n  (event.category: process and process.name:\
-      \ \"whoami.exe\") or\n\n  (\n    event.code: 4104 and \n    (\n      powershell.file.script_block_text\
-      \ : \"*$env:USERNAME*\" or\n      powershell.file.script_block_text : \"*$env:USERDOMAIN*\"\
-      \ or\n      powershell.file.script_block_text : \"*[Environment]::UserName*\"\
-      \n    )\n  )\n)\n"
+    kql_query: "host.os.type: \"windows\" and\n(\n  (\n    event.category: process\
+      \ and process.name: \"cmd.exe\" and \n    (\n      process.command_line : \"\
+      *%USERNAME%*\" or\n      process.command_line : \"*%USERDOMAIN%*\" or\n    \
+      \  process.command_line : \"*%USERPROFILE%*\"\n    )\n  ) or\n\n  (event.category:\
+      \ process and process.name: \"whoami.exe\") or\n\n  (\n    event.code: 4104\
+      \ and \n    (\n      powershell.file.script_block_text : \"*$env:USERNAME*\"\
+      \ or\n      powershell.file.script_block_text : \"*$env:USERDOMAIN*\" or\n \
+      \     powershell.file.script_block_text : \"*[Environment]::UserName*\"\n  \
+      \  )\n  )\n)\n"
   condition: selection
 falsepositives:
 - Unknown

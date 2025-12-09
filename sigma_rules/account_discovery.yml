@@ -13,12 +13,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.discovery
-- Windows
-- MITRE
 - attack.ta0007
-- APT29
 - attack.t1087
+- MITRE
+- APT29
+- Windows
+- attack.discovery
 level: low
 logsource:
   category: process_creation
@@ -27,8 +27,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:windows and\n(\n  (event.category : process and (process.name\
+    kql_query: "host.os.type:windows and\n(\n  (event.category : process and (process.name\
       \ : \"net.exe\" or process.name : \"net1.exe\") and \n   process.command_line\
       \ : *user* and process.command_line : */domain*) or\n  (event.code : \"4104\"\
       \ and \n   powershell.file.script_block_text : (*Get-ADUser* or *Get-DomainUser*\

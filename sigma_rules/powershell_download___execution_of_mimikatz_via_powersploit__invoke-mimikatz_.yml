@@ -25,14 +25,14 @@ modified: '2025-12-08'
 references: []
 tags:
 - attack.ta0006
-- Windows
-- attack.credential_access
-- MITRE
-- attack.ta0002
-- attack.t1003
-- Kill_chain
 - attack.t1059
+- Kill_chain
+- MITRE
 - attack.execution
+- attack.ta0002
+- Windows
+- attack.t1003
+- attack.credential_access
 level: high
 logsource:
   category: process_creation
@@ -41,8 +41,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - 'host.os.type:"windows" and
+    kql_query: 'host.os.type:"windows" and
 
       event.code:"600" and
 

@@ -14,18 +14,18 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- 'Tactic: Discovery'
-- attack.ta0043
-- 'Domain: Network'
-- attack.discovery
-- attack.reconnaissance
-- attack.ta0007
-- 'Tactic: Reconnaissance'
-- 'Use Case: Network Security Monitoring'
-- 'Resources: Investigation Guide'
 - attack.t1046
-- attack.t1595
+- attack.ta0007
 - 'Data Source: PAN-OS'
+- attack.reconnaissance
+- attack.ta0043
+- 'Tactic: Reconnaissance'
+- attack.t1595
+- 'Tactic: Discovery'
+- 'Resources: Investigation Guide'
+- 'Domain: Network'
+- 'Use Case: Network Security Monitoring'
+- attack.discovery
 level: low
 logsource:
   category: unknown

@@ -15,14 +15,14 @@ references:
 - https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteGroup.html
 tags:
 - attack.ta0040
+- 'Resources: Investigation Guide'
 - attack.t1531
-- 'Tactic: Impact'
-- 'Domain: Cloud'
 - attack.impact
 - 'Data Source: AWS'
-- 'Resources: Investigation Guide'
-- 'Data Source: AWS IAM'
+- 'Domain: Cloud'
 - 'Data Source: Amazon Web Services'
+- 'Tactic: Impact'
+- 'Data Source: AWS IAM'
 level: low
 logsource:
   category: unknown
@@ -32,9 +32,8 @@ logsource:
   - logs-aws.cloudtrail-*
 detection:
   selection:
-    keywords:
-    - "event.dataset: aws.cloudtrail and \n    event.provider: iam.amazonaws.com and\
-      \ \n    event.action: DeleteGroup and \n    event.outcome: success\n"
+    kql_query: "event.dataset: aws.cloudtrail and \n    event.provider: iam.amazonaws.com\
+      \ and \n    event.action: DeleteGroup and \n    event.outcome: success\n"
   condition: selection
 falsepositives:
 - Legitimate group deletion during decommissioning of projects, clean-up of service

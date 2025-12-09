@@ -11,16 +11,16 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- 'Data Source: Windows Security Event Logs'
-- 'Tactic: Defense Evasion'
-- attack.defense_evasion
-- 'Data Source: Windows System Event Logs'
-- 'OS: Windows'
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
 - attack.ta0005
-- 'Domain: Endpoint'
+- 'Data Source: Windows Security Event Logs'
+- attack.defense_evasion
+- 'Tactic: Defense Evasion'
+- 'Use Case: Threat Detection'
+- 'OS: Windows'
 - attack.t1070
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
+- 'Data Source: Windows System Event Logs'
 level: low
 logsource:
   category: unknown
@@ -32,9 +32,8 @@ logsource:
   - logs-windows.forwarded*
 detection:
   selection:
-    keywords:
-    - "host.os.type:windows and event.action:(\"audit-log-cleared\" or \"Log clear\"\
-      ) and\n  not winlog.provider_name:\"AD FS Auditing\"\n"
+    kql_query: "host.os.type:windows and event.action:(\"audit-log-cleared\" or \"\
+      Log clear\") and\n  not winlog.provider_name:\"AD FS Auditing\"\n"
   condition: selection
 falsepositives:
 - Unknown

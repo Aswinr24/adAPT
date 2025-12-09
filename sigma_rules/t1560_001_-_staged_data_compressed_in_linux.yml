@@ -8,13 +8,13 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- Linux
-- MITRE
 - T1560.001
-- attack.collection
-- Auditbeat
-- attack.t1560
+- Linux
 - attack.ta0009
+- Auditbeat
+- MITRE
+- attack.t1560
+- attack.collection
 level: medium
 logsource:
   category: process_creation
@@ -23,14 +23,13 @@ logsource:
   - auditbeat-*
 detection:
   selection:
-    keywords:
-    - "agent.type: \"auditbeat\" AND \nevent.category: \"process\" AND \nevent.action:\
-      \ \"executed\" AND\n\nprocess.name: (\n  \"tar\" OR \"zip\" OR \"gzip\" OR \"\
-      bzip2\" OR \"xz\" OR \"7z\" OR\n  \"7za\" OR \"rar\" OR \"gpg\" OR \"openssl\"\
-      \ OR \"split\"\n) AND\n\nprocess.args: (\n  \"*.tar\" OR \"*.tgz\" OR \"*.tar.gz\"\
-      \ OR \"*.gz\" OR \"*.zip\" OR \"*.7z\" OR \"*.rar\" OR \"*.enc\"\n) AND (\n\n\
-      \  process.args: (\n    \"/etc/*\" OR \"/root/*\" OR \"/home/*/.ssh/*\" OR \"\
-      /var/www/*\" OR \"/var/lib/*\"\n  )\n\n  OR process.args: (\n    \"/tmp/*\"\
+    kql_query: "agent.type: \"auditbeat\" AND \nevent.category: \"process\" AND \n\
+      event.action: \"executed\" AND\n\nprocess.name: (\n  \"tar\" OR \"zip\" OR \"\
+      gzip\" OR \"bzip2\" OR \"xz\" OR \"7z\" OR\n  \"7za\" OR \"rar\" OR \"gpg\"\
+      \ OR \"openssl\" OR \"split\"\n) AND\n\nprocess.args: (\n  \"*.tar\" OR \"*.tgz\"\
+      \ OR \"*.tar.gz\" OR \"*.gz\" OR \"*.zip\" OR \"*.7z\" OR \"*.rar\" OR \"*.enc\"\
+      \n) AND (\n\n  process.args: (\n    \"/etc/*\" OR \"/root/*\" OR \"/home/*/.ssh/*\"\
+      \ OR \"/var/www/*\" OR \"/var/lib/*\"\n  )\n\n  OR process.args: (\n    \"/tmp/*\"\
       \ OR \"/var/tmp/*\" OR \"/dev/shm/*\" OR \"/run/shm/*\"\n  )\n  OR (process.name:\
       \ \"tar\" AND process.args: \"-P\")\n\n  OR process.args: (\n    \"*staged*\"\
       \ OR \"*staging*\" OR \"*exfil*\" OR \"*password*\" OR \"*shadow*\"\n  )\n \n\

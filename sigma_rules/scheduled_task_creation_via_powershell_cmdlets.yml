@@ -14,15 +14,15 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
+- attack.t1053
+- attack.persistence
 - attack.ta0003
+- APT28
 - Persistance
-- Windows
 - MITRE
 - attack.ta0002
-- attack.t1053
 - attack.execution
-- attack.persistence
-- APT28
+- Windows
 level: medium
 logsource:
   category: process_creation
@@ -31,8 +31,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "event.category:process and host.os.type:windows and\n  (\n    process.command_line\
+    kql_query: "event.category:process and host.os.type:windows and\n  (\n    process.command_line\
       \ : *Register-ScheduledTask* or\n    (process.command_line : *New-ScheduledTaskAction*\
       \ and process.command_line : *New-ScheduledTaskTrigger*) or\n    process.args\
       \ : *Register-ScheduledTask* or\n    (process.args : *New-ScheduledTaskAction*\

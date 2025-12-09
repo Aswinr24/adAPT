@@ -8,10 +8,10 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.ta0042
 - attack.t1587
 - MITRE
 - attack.resource_development
+- attack.ta0042
 level: medium
 logsource:
   category: process_creation
@@ -21,9 +21,8 @@ logsource:
   - auditbeat-*
 detection:
   selection:
-    keywords:
-    - "event.type: \"start\" AND\n(\n  (\n    host.os.type: \"windows\" AND\n    (\n\
-      \      process.name: (\"certutil.exe\" OR \"makecert.exe\" OR \"pvk2pfx.exe\"\
+    kql_query: "event.type: \"start\" AND\n(\n  (\n    host.os.type: \"windows\" AND\n\
+      \    (\n      process.name: (\"certutil.exe\" OR \"makecert.exe\" OR \"pvk2pfx.exe\"\
       ) OR\n      process.command_line: (\n        \"*exportPFX*\" OR \"*-export*\"\
       \ OR \"*-ss*\" OR \"*-pe*\"\n      )\n    )\n  )\n  OR\n  (\n    host.os.type:\
       \ \"linux\" AND\n    process.name: (\"openssl\" OR \"keytool\") AND\n    process.args:\

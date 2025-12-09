@@ -12,26 +12,26 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- attack.t1574
-- 'Data Source: SentinelOne'
 - 'Data Source: Auditd Manager'
-- 'Domain: Endpoint'
-- attack.defense_evasion
-- attack.t1543
-- 'OS: Linux'
+- 'Data Source: SentinelOne'
+- attack.persistence
 - 'Use Case: Threat Detection'
+- 'Data Source: Elastic Defend'
+- attack.t1574
+- attack.defense_evasion
+- 'OS: Linux'
+- attack.t1059
+- 'Data Source: Crowdstrike'
+- 'Data Source: Elastic Endgame'
+- attack.ta0002
+- attack.t1542
 - attack.ta0005
 - 'Tactic: Persistence'
-- attack.t1542
-- 'Data Source: Elastic Defend'
-- attack.t1059
-- attack.execution
 - attack.ta0003
-- 'Data Source: Crowdstrike'
-- attack.ta0002
+- attack.execution
+- 'Domain: Endpoint'
 - 'Resources: Investigation Guide'
-- 'Data Source: Elastic Endgame'
-- attack.persistence
+- attack.t1543
 level: low
 logsource:
   category: process_creation

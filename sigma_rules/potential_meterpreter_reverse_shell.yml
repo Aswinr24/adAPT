@@ -13,18 +13,18 @@ references:
 - https://www.elastic.co/security-labs/primer-on-persistence-mechanisms
 - https://www.elastic.co/security-labs/linux-detection-engineering-with-auditd
 tags:
-- attack.t1071
-- 'Tactic: Execution'
-- attack.command_and_control
-- attack.ta0002
-- 'OS: Linux'
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- attack.ta0011
 - 'Data Source: Auditd Manager'
-- 'Domain: Endpoint'
 - attack.t1059
+- attack.command_and_control
+- 'Use Case: Threat Detection'
+- attack.t1071
+- attack.ta0002
 - attack.execution
+- attack.ta0011
+- 'Domain: Endpoint'
+- 'Tactic: Execution'
+- 'Resources: Investigation Guide'
+- 'OS: Linux'
 level: medium
 logsource:
   category: process_creation

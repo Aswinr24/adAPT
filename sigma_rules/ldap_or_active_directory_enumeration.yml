@@ -7,10 +7,10 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.ta0043
+- attack.t1589
 - MITRE
 - attack.reconnaissance
-- attack.t1589
+- attack.ta0043
 level: medium
 logsource:
   category: process_creation
@@ -19,11 +19,10 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "event.category: process AND event.type: start AND\n(\n  process.name: (\n \
-      \   \"ldapsearch\" OR \"ldapwhoami\" OR \"dsquery.exe\" OR \"dsget.exe\" OR\n\
-      \    \"adfind.exe\" OR \"ldp.exe\" OR \"csvde.exe\" OR \"ldifde.exe\"\n  )\n\
-      \n  OR\n\n  (\n    process.command_line: \"*ldap*\" AND\n    process.command_line:\
+    kql_query: "event.category: process AND event.type: start AND\n(\n  process.name:\
+      \ (\n    \"ldapsearch\" OR \"ldapwhoami\" OR \"dsquery.exe\" OR \"dsget.exe\"\
+      \ OR\n    \"adfind.exe\" OR \"ldp.exe\" OR \"csvde.exe\" OR \"ldifde.exe\"\n\
+      \  )\n\n  OR\n\n  (\n    process.command_line: \"*ldap*\" AND\n    process.command_line:\
       \ (\"*CN=*\"\n                           OR \"*OU=*\"\n                    \
       \       OR \"*DC=*\"\n                           OR \"*objectClass=*\"\n   \
       \                        OR \"*memberOf=*\"\n                           OR \"\

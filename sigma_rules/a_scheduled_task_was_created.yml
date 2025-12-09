@@ -12,14 +12,14 @@ references:
 - https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4698
 tags:
 - 'Data Source: Windows Security Event Logs'
+- attack.persistence
+- attack.t1053
 - 'Tactic: Persistence'
 - attack.ta0003
-- 'OS: Windows'
-- attack.t1053
 - 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
+- 'OS: Windows'
 - 'Domain: Endpoint'
-- attack.persistence
+- 'Resources: Investigation Guide'
 level: low
 logsource:
   category: unknown

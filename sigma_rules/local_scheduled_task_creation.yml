@@ -13,16 +13,16 @@ references:
 - https://www.elastic.co/security-labs/invisible-miners-unveiling-ghostengine
 - https://www.elastic.co/security-labs/elastic-protects-against-data-wiper-malware-targeting-ukraine-hermeticwiper
 tags:
+- attack.t1053
+- attack.persistence
 - 'Tactic: Persistence'
 - attack.ta0003
-- attack.persistence
-- 'OS: Windows'
-- attack.t1053
+- 'Data Source: Sysmon'
 - 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
+- 'OS: Windows'
 - 'Data Source: Elastic Defend'
 - 'Domain: Endpoint'
-- 'Data Source: Sysmon'
+- 'Resources: Investigation Guide'
 level: low
 logsource:
   category: process_creation

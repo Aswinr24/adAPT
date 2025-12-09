@@ -11,16 +11,16 @@ modified: '2025-12-05'
 references:
 - https://www.anomali.com/blog/rocke-evolves-its-arsenal-with-a-new-malware-family-written-in-golang
 tags:
-- attack.t1574
-- 'Tactic: Privilege Escalation'
-- attack.ta0004
-- 'OS: Linux'
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
 - attack.privilege_escalation
-- 'Data Source: Elastic Defend'
-- 'Domain: Endpoint'
+- attack.ta0004
+- 'Use Case: Threat Detection'
 - 'Data Source: Elastic Endgame'
+- 'Data Source: Elastic Defend'
+- attack.t1574
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
+- 'OS: Linux'
+- 'Tactic: Privilege Escalation'
 level: medium
 logsource:
   category: process_creation
@@ -30,7 +30,15 @@ logsource:
   - logs-endpoint.events.*
   - endgame-*
 detection:
-  selection: {}
+  selection:
+    query: 'host.os.type:linux and event.category:file and event.action:(file_rename_event
+      or rename or renamed or updated) and
+
+      not event.type:deletion and file.path:/etc/ld.so.preload and
+
+      process.name:(* and not (oneagentinstallaction or passwd or wine))
+
+      '
   condition: selection
 falsepositives:
 - Unknown

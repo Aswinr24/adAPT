@@ -10,18 +10,18 @@ modified: '2025-12-05'
 references:
 - https://www.elastic.co/security-labs/detecting-log4j2-with-elastic-security
 tags:
-- 'Tactic: Defense Evasion'
-- attack.defense_evasion
-- 'Data Source: Crowdstrike'
-- 'Data Source: SentinelOne'
-- 'OS: Linux'
-- 'Use Case: Threat Detection'
 - 'Resources: Investigation Guide'
-- attack.t1562
 - attack.ta0005
+- attack.t1562
+- 'Tactic: Defense Evasion'
+- 'Use Case: Threat Detection'
+- 'Data Source: Crowdstrike'
+- 'Data Source: Elastic Endgame'
 - 'Data Source: Elastic Defend'
 - 'Domain: Endpoint'
-- 'Data Source: Elastic Endgame'
+- 'Data Source: SentinelOne'
+- attack.defense_evasion
+- 'OS: Linux'
 level: medium
 logsource:
   category: process_creation

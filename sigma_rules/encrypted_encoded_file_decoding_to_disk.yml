@@ -12,12 +12,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.defense_evasion
-- Windows
-- attack.t1027
-- MITRE
 - attack.ta0005
 - APT36
+- MITRE
+- Windows
+- attack.t1027
+- attack.defense_evasion
 level: high
 logsource:
   category: unknown
@@ -26,8 +26,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:windows and event.code:4104 and\n(\n  (powershell.file.script_block_text:*FromBase64String*\
+    kql_query: "host.os.type:windows and event.code:4104 and\n(\n  (powershell.file.script_block_text:*FromBase64String*\
       \ and\n   (powershell.file.script_block_text:*Out-File* or powershell.file.script_block_text:*Set-Content*\
       \ or powershell.file.script_block_text:*Add-Content*)) or\n  \n  (powershell.file.script_block_text:*ConvertTo-SecureString*\
       \ and\n   powershell.file.script_block_text:*-Key* and\n   (powershell.file.script_block_text:*Out-File*\

@@ -11,15 +11,15 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- 'Tactic: Defense Evasion'
-- attack.defense_evasion
-- 'OS: Windows'
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
 - attack.ta0005
-- 'Domain: Endpoint'
-- attack.t1070
+- 'Tactic: Defense Evasion'
 - 'Data Source: Sysmon'
+- 'Use Case: Threat Detection'
+- 'OS: Windows'
+- attack.t1070
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
+- attack.defense_evasion
 level: medium
 logsource:
   category: process_creation

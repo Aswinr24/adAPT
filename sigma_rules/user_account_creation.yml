@@ -9,21 +9,21 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
+- 'Data Source: Microsoft Defender for Endpoint'
 - 'Data Source: Windows Security Event Logs'
+- attack.persistence
 - 'Tactic: Persistence'
 - attack.ta0003
-- attack.persistence
-- 'OS: Windows'
-- 'Data Source: Crowdstrike'
-- 'Data Source: SentinelOne'
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- 'Data Source: Microsoft Defender for Endpoint'
-- 'Data Source: Elastic Defend'
-- 'Domain: Endpoint'
-- 'Data Source: Elastic Endgame'
 - 'Data Source: Sysmon'
+- 'Use Case: Threat Detection'
+- 'OS: Windows'
+- 'Data Source: Elastic Endgame'
+- 'Data Source: Elastic Defend'
+- 'Data Source: Crowdstrike'
 - attack.t1136
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
+- 'Data Source: SentinelOne'
 level: low
 logsource:
   category: process_creation

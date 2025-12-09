@@ -14,19 +14,19 @@ references:
 - https://github.com/EmpireProject/Empire/blob/master/data/module_source/privesc/Invoke-MS16032.ps1
 - https://github.com/atc-project/atc-data/blob/master/docs/Logging_Policies/LP_0109_windows_powershell_script_block_log.md
 tags:
-- attack.t1134
-- attack.t1106
-- 'Tactic: Privilege Escalation'
+- attack.privilege_escalation
 - attack.ta0004
+- attack.t1059
+- attack.t1134
+- 'Use Case: Threat Detection'
 - 'OS: Windows'
 - attack.ta0002
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- attack.privilege_escalation
-- 'Domain: Endpoint'
-- attack.t1059
 - attack.execution
+- attack.t1106
+- 'Domain: Endpoint'
 - 'Data Source: PowerShell Logs'
+- 'Resources: Investigation Guide'
+- 'Tactic: Privilege Escalation'
 level: medium
 logsource:
   category: process_creation
@@ -36,8 +36,7 @@ logsource:
   - logs-windows.powershell*
 detection:
   selection:
-    keywords:
-    - "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text:(\n\
+    kql_query: "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text:(\n\
       \    \"Invoke-TokenManipulation\" or\n    \"ImpersonateNamedPipeClient\" or\n\
       \    \"NtImpersonateThread\" or\n    (\n      \"STARTUPINFOEX\" and\n      \"\
       UpdateProcThreadAttribute\"\n    ) or\n    (\n      \"AdjustTokenPrivileges\"\

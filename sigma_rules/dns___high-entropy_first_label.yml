@@ -19,8 +19,8 @@ logsource:
   - zeek-*
 detection:
   selection:
-    keywords:
-    - 'event.dataset: "zeek.dns" and domain_entropy > 3.5 and domain_length > 12
+    kql_query: 'event.dataset: "zeek.dns" and domain_entropy > 3.5 and domain_length
+      > 12
 
       '
   condition: selection

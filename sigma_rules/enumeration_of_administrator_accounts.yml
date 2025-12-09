@@ -9,20 +9,20 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- 'Data Source: Windows Security Event Logs'
-- 'Tactic: Discovery'
-- attack.t1087
-- attack.discovery
-- 'OS: Windows'
-- 'Data Source: Crowdstrike'
 - attack.ta0007
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
 - 'Data Source: Microsoft Defender for Endpoint'
-- 'Data Source: Elastic Defend'
-- 'Domain: Endpoint'
-- 'Data Source: Elastic Endgame'
+- attack.t1087
+- 'Data Source: Windows Security Event Logs'
 - attack.t1069
+- 'Use Case: Threat Detection'
+- 'OS: Windows'
+- 'Data Source: Elastic Endgame'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Defend'
+- 'Data Source: Crowdstrike'
+- 'Tactic: Discovery'
+- 'Resources: Investigation Guide'
+- attack.discovery
 level: low
 logsource:
   category: process_creation

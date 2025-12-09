@@ -14,12 +14,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- Windows
-- MITRE
-- attack.ta0002
 - attack.t1059
+- MITRE
 - attack.execution
+- attack.ta0002
 - APT29
+- Windows
 level: high
 logsource:
   category: process_creation
@@ -28,11 +28,10 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:windows and event.category : process and \nprocess.name : \"powershell.exe\"\
-      \ and \n(\n  process.command_line : (*-ep*bypass* or *-exec*bypass* or *-executionpolicy*bypass*)\
-      \ and\n  process.command_line : (*-nop* or *-noni* or *-enc* or *-command*)\n\
-      )"
+    kql_query: "host.os.type:windows and event.category : process and \nprocess.name\
+      \ : \"powershell.exe\" and \n(\n  process.command_line : (*-ep*bypass* or *-exec*bypass*\
+      \ or *-executionpolicy*bypass*) and\n  process.command_line : (*-nop* or *-noni*\
+      \ or *-enc* or *-command*)\n)"
   condition: selection
 falsepositives:
 - Unknown

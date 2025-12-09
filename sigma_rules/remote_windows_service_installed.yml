@@ -10,19 +10,19 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- 'Data Source: Windows Security Event Logs'
 - attack.ta0008
+- 'Data Source: Windows Security Event Logs'
+- attack.persistence
+- attack.t1021
 - 'Tactic: Persistence'
 - attack.ta0003
-- attack.t1021
-- 'OS: Windows'
-- attack.t1543
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- attack.lateral_movement
-- 'Domain: Endpoint'
-- attack.persistence
 - 'Tactic: Lateral Movement'
+- attack.lateral_movement
+- 'Use Case: Threat Detection'
+- 'OS: Windows'
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
+- attack.t1543
 level: medium
 logsource:
   category: unknown

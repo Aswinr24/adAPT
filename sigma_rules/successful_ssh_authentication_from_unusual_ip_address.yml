@@ -13,13 +13,13 @@ references: []
 tags:
 - 'Tactic: Initial Access'
 - attack.ta0001
-- 'OS: Linux'
+- attack.t1078
 - 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- attack.initial_access
 - 'Data Source: Elastic Defend'
 - 'Domain: Endpoint'
-- attack.t1078
+- attack.initial_access
+- 'Resources: Investigation Guide'
+- 'OS: Linux'
 level: low
 logsource:
   category: unknown
@@ -28,7 +28,11 @@ logsource:
   - logs-system.auth-*
   - filebeat-*
 detection:
-  selection: {}
+  selection:
+    query: 'event.category:authentication and host.os.type:linux and event.action:ssh_login
+      and event.outcome:success
+
+      '
   condition: selection
 falsepositives:
 - Unknown

@@ -9,25 +9,25 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- attack.ta0040
-- 'Tactic: Impact'
-- 'Tactic: Execution'
-- 'OS: Windows'
-- 'Data Source: SentinelOne'
-- 'Domain: Endpoint'
 - attack.t1490
-- attack.t1047
-- 'Use Case: Threat Detection'
-- 'Data Source: Microsoft Defender for Endpoint'
-- 'Data Source: Windows Security Event Logs'
-- 'Data Source: Elastic Defend'
-- attack.execution
-- 'Data Source: Crowdstrike'
+- 'Data Source: SentinelOne'
 - attack.impact
-- attack.ta0002
-- 'Resources: Investigation Guide'
-- 'Data Source: Elastic Endgame'
+- 'Use Case: Threat Detection'
+- 'Data Source: Elastic Defend'
+- 'Tactic: Execution'
+- 'Data Source: Microsoft Defender for Endpoint'
 - 'Data Source: Sysmon'
+- 'Data Source: Crowdstrike'
+- 'Data Source: Elastic Endgame'
+- attack.ta0002
+- 'Tactic: Impact'
+- attack.ta0040
+- 'Data Source: Windows Security Event Logs'
+- attack.t1047
+- 'OS: Windows'
+- attack.execution
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
 level: high
 logsource:
   category: process_creation

@@ -12,15 +12,15 @@ modified: '2025-12-05'
 references:
 - https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4625
 tags:
-- 'Data Source: Windows Security Event Logs'
-- attack.ta0006
 - 'Tactic: Credential Access'
+- attack.ta0006
+- 'Data Source: Windows Security Event Logs'
 - attack.t1110
-- attack.credential_access
-- 'OS: Windows'
 - 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
+- 'OS: Windows'
 - 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
+- attack.credential_access
 level: medium
 logsource:
   category: unknown

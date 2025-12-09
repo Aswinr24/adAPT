@@ -15,12 +15,12 @@ date: '2025-12-09'
 modified: '2025-12-09'
 references: []
 tags:
-- Windows
-- MITRE
-- attack.ta0002
 - attack.t1059
-- attack.execution
 - APT36
+- MITRE
+- attack.execution
+- attack.ta0002
+- Windows
 level: high
 logsource:
   category: process_creation
@@ -29,8 +29,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - 'host.os.type: "windows" AND
+    kql_query: 'host.os.type: "windows" AND
 
       event.code: "600" AND
 

@@ -11,17 +11,17 @@ modified: '2025-12-06'
 references:
 - https://www.elastic.co/security-labs/elastic-protects-against-data-wiper-malware-targeting-ukraine-hermeticwiper
 tags:
+- attack.ta0005
 - attack.t1218
 - 'Tactic: Defense Evasion'
-- attack.defense_evasion
-- 'OS: Windows'
-- 'Data Source: SentinelOne'
+- 'Data Source: Sysmon'
 - 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- attack.ta0005
+- 'OS: Windows'
 - 'Data Source: Elastic Defend'
 - 'Domain: Endpoint'
-- 'Data Source: Sysmon'
+- 'Resources: Investigation Guide'
+- attack.defense_evasion
+- 'Data Source: SentinelOne'
 level: medium
 logsource:
   category: process_creation

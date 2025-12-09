@@ -13,19 +13,19 @@ modified: '2025-12-05'
 references:
 - https://decoded.avast.io/davidalvarez/linux-threat-hunting-syslogk-a-kernel-rootkit-found-under-development-in-the-wild/
 tags:
+- 'Resources: Investigation Guide'
+- 'Data Source: Auditd Manager'
+- attack.persistence
 - 'Tactic: Persistence'
 - attack.ta0003
-- 'Data Source: SentinelOne'
-- 'OS: Linux'
 - 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- 'Threat: Rootkit'
-- 'Data Source: Auditd Manager'
-- 'Data Source: Elastic Defend'
-- 'Domain: Endpoint'
 - 'Data Source: Elastic Endgame'
-- attack.persistence
+- 'Data Source: Elastic Defend'
 - attack.t1547
+- 'Domain: Endpoint'
+- 'Data Source: SentinelOne'
+- 'Threat: Rootkit'
+- 'OS: Linux'
 level: medium
 logsource:
   category: process_creation

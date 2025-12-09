@@ -11,12 +11,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.defense_evasion
-- Windows
-- attack.t1027
-- MITRE
 - attack.ta0005
 - APT36
+- MITRE
+- Windows
+- attack.t1027
+- attack.defense_evasion
 level: medium
 logsource:
   category: process_creation
@@ -25,15 +25,15 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\n(\n  (\n    process.command_line:\
-      \ *ConvertTo-SecureString* AND\n    process.command_line: *-Key* AND\n    process.command_line:\
-      \ (*SecureStringToBSTR* OR *PtrToStringBSTR*)\n  )\n  OR\n  (\n    process.command_line:\
-      \ *Runtime.InteropServices.Marshal* AND\n    process.command_line: *SecureStringToBSTR*\
-      \ AND\n    process.command_line: (*Out-File* OR *Set-Content* OR *Add-Content*)\n\
-      \  )\n  OR\n  (\n    process.command_line: *ConvertTo-SecureString* AND\n  \
-      \  process.command_line: *[byte]* AND\n    process.command_line: (*PtrToStringBSTR*\
-      \ OR *PtrToStringUni* OR *PtrToStringAnsi*)\n  )\n)"
+    kql_query: "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\n(\n  (\n \
+      \   process.command_line: *ConvertTo-SecureString* AND\n    process.command_line:\
+      \ *-Key* AND\n    process.command_line: (*SecureStringToBSTR* OR *PtrToStringBSTR*)\n\
+      \  )\n  OR\n  (\n    process.command_line: *Runtime.InteropServices.Marshal*\
+      \ AND\n    process.command_line: *SecureStringToBSTR* AND\n    process.command_line:\
+      \ (*Out-File* OR *Set-Content* OR *Add-Content*)\n  )\n  OR\n  (\n    process.command_line:\
+      \ *ConvertTo-SecureString* AND\n    process.command_line: *[byte]* AND\n   \
+      \ process.command_line: (*PtrToStringBSTR* OR *PtrToStringUni* OR *PtrToStringAnsi*)\n\
+      \  )\n)"
   condition: selection
 falsepositives:
 - Unknown

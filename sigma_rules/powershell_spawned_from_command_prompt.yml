@@ -13,12 +13,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- Windows
-- MITRE
-- attack.ta0002
 - attack.t1059
+- MITRE
 - attack.execution
+- attack.ta0002
 - APT29
+- Windows
 level: medium
 logsource:
   category: process_creation
@@ -27,8 +27,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - 'host.os.type:windows and event.category:process and
+    kql_query: 'host.os.type:windows and event.category:process and
 
       process.name : ("powershell.exe" or "powershell" or "pwsh.exe" or "pwsh") and
 

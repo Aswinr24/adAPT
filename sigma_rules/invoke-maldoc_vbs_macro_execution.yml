@@ -12,12 +12,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- Windows
-- MITRE
-- attack.ta0002
-- attack.execution
-- APT36
 - attack.t1204
+- APT36
+- MITRE
+- attack.execution
+- attack.ta0002
+- Windows
 level: high
 logsource:
   category: process_creation
@@ -26,8 +26,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\nprocess.command_line:\
+    kql_query: "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\nprocess.command_line:\
       \ (\n  (*IEX* OR *Invoke-Expression*) AND\n  (*iwr* OR *Invoke-WebRequest*)\
       \ AND\n  *-UseBasicParsing* AND\n  (*Invoke-Maldoc* OR *Invoke-MalDoc*)\n) AND\n\
       process.command_line: (\n  *choice* AND */C* AND */N* AND */D* AND */T*\n)"

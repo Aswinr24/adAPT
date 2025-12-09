@@ -8,11 +8,11 @@ modified: '2025-12-08'
 references: []
 tags:
 - attack.ta0006
+- Linux
 - SSH
 - attack.t1110
-- attack.credential_access
-- Linux
 - MITRE
+- attack.credential_access
 level: medium
 logsource:
   category: unknown

@@ -19,8 +19,7 @@ logsource:
   - zeek-*
 detection:
   selection:
-    keywords:
-    - "event.dataset: \"zeek.dns\" and network.transport: \"udp\" \nand destination.port:\
+    kql_query: "event.dataset: \"zeek.dns\" and network.transport: \"udp\" \nand destination.port:\
       \ 53 \nand not destination.ip: (10.10.10.1 or 10.10.10.5)\n"
   condition: selection
 falsepositives:

@@ -14,14 +14,14 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.t1016
-- attack.t1018
-- attack.discovery
-- Windows
 - attack.ta0007
-- MITRE
 - Discovery
 - APT28
+- attack.t1016
+- MITRE
+- attack.t1018
+- Windows
+- attack.discovery
 level: low
 logsource:
   category: process_creation
@@ -30,8 +30,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "event.category:process and host.os.type:windows and\n  (\n    (process.name\
+    kql_query: "event.category:process and host.os.type:windows and\n  (\n    (process.name\
       \ : \"arp.exe\" and process.args : \"-a\") or\n    (process.command_line : *arp*\
       \ and process.command_line : *-a*) or\n    process.command_line : *Get-NetNeighbor*\n\
       \  ) and\n  not process.parent.executable : (\"C:\\\\Windows\\\\System32\\\\\

@@ -8,8 +8,8 @@ modified: '2025-12-08'
 references: []
 tags:
 - Windows
-- APT36
 - MITRE
+- APT36
 level: critical
 logsource:
   category: process_creation

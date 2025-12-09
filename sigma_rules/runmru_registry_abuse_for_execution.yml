@@ -14,12 +14,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- Windows
-- MITRE
-- attack.ta0002
-- attack.execution
-- APT36
 - attack.t1204
+- APT36
+- MITRE
+- attack.execution
+- attack.ta0002
+- Windows
 level: high
 logsource:
   category: unknown
@@ -28,8 +28,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:windows and event.code:4104 and\npowershell.file.script_block_text:*Set-ItemProperty*\
+    kql_query: "host.os.type:windows and event.code:4104 and\npowershell.file.script_block_text:*Set-ItemProperty*\
       \ and\npowershell.file.script_block_text:*RunMRU* and\n(\n  powershell.file.script_block_text:*mshta.exe*\
       \ or\n  \n  (powershell.file.script_block_text:*cmd.exe* and powershell.file.script_block_text:*/c*)\
       \ or\n  \n  powershell.file.script_block_text:(*http* or *.hta* or *.bat* or\

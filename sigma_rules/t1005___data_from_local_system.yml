@@ -7,13 +7,13 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- T1005
 - Linux
-- MITRE
-- attack.collection
-- Auditbeat
 - attack.ta0009
 - attack.t1005
+- Auditbeat
+- MITRE
+- attack.collection
+- T1005
 level: medium
 logsource:
   category: process_creation
@@ -22,9 +22,8 @@ logsource:
   - auditbeat-*
 detection:
   selection:
-    keywords:
-    - "event.category: \"process\" AND event.type: \"start\" AND\nprocess.name: (\"\
-      find\" or \"grep\" or \"locate\") AND (\n\n  process.args: (\n    \"*id_rsa*\"\
+    kql_query: "event.category: \"process\" AND event.type: \"start\" AND\nprocess.name:\
+      \ (\"find\" or \"grep\" or \"locate\") AND (\n\n  process.args: (\n    \"*id_rsa*\"\
       \ or \"*.pem\" or \"*.ppk*\" or \"*.key\" or\n    \"*shadow*\" or \"*.kdbx*\"\
       \ or \"*credentials*\" or\n    \"*signons.sqlite*\" or \"*.aws/credentials*\"\
       \ or \"*.kube/config*\" or\n    \"*.env\" or \"*config.php*\" or \"*wp-config.php*\"\

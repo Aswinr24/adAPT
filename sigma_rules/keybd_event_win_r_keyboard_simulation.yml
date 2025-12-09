@@ -13,12 +13,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- Windows
+- attack.t1566
+- APT36
 - attack.ta0001
 - MITRE
 - attack.initial_access
-- attack.t1566
-- APT36
+- Windows
 level: high
 logsource:
   category: process_creation
@@ -27,8 +27,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\n(\n  (process.command_line:\
+    kql_query: "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\n(\n  (process.command_line:\
       \ *Add-Type* AND process.command_line: *DllImport* AND process.command_line:\
       \ *keybd_event*) OR\n  (process.command_line: *SendKeys* AND process.command_line:\
       \ *ToBase64String*) OR\n  (process.command_line: *user32.dll* AND process.command_line:\

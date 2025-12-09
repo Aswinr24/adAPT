@@ -11,12 +11,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.t1036
-- attack.defense_evasion
-- Windows
-- MITRE
 - attack.ta0005
+- MITRE
 - APT29
+- Windows
+- attack.defense_evasion
+- attack.t1036
 level: high
 logsource:
   category: process_creation

@@ -10,19 +10,19 @@ modified: '2025-12-05'
 references:
 - https://www.elastic.co/security-labs/primer-on-persistence-mechanisms
 tags:
+- 'Data Source: Auditd Manager'
+- attack.persistence
 - 'Tactic: Persistence'
 - attack.ta0003
-- 'Data Source: Crowdstrike'
-- 'Data Source: SentinelOne'
-- 'OS: Linux'
 - 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- 'Data Source: Auditd Manager'
-- 'Data Source: Elastic Defend'
-- 'Domain: Endpoint'
+- 'Data Source: Crowdstrike'
 - 'Data Source: Elastic Endgame'
-- attack.persistence
+- 'Data Source: Elastic Defend'
 - attack.t1136
+- 'Domain: Endpoint'
+- 'Data Source: SentinelOne'
+- 'Resources: Investigation Guide'
+- 'OS: Linux'
 level: low
 logsource:
   category: process_creation

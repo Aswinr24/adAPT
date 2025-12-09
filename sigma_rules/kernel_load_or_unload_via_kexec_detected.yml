@@ -17,27 +17,27 @@ references:
 - https://www.makeuseof.com/what-is-venom-vulnerability/
 - https://madaidans-insecurities.github.io/guides/linux-hardening.html
 tags:
-- 'Data Source: SentinelOne'
-- 'Data Source: Auditd Manager'
-- 'Domain: Endpoint'
-- attack.t1601
-- 'Tactic: Defense Evasion'
-- attack.ta0004
-- attack.defense_evasion
-- 'OS: Linux'
-- 'Use Case: Threat Detection'
-- attack.ta0005
-- 'Tactic: Persistence'
 - attack.privilege_escalation
+- 'Data Source: Auditd Manager'
+- 'Data Source: SentinelOne'
+- 'Tactic: Privilege Escalation'
+- attack.persistence
+- attack.t1611
+- attack.t1601
+- 'Use Case: Threat Detection'
 - 'Data Source: Elastic Defend'
 - attack.t1547
-- attack.ta0003
-- 'Tactic: Privilege Escalation'
+- attack.defense_evasion
+- 'OS: Linux'
+- 'Tactic: Defense Evasion'
 - 'Data Source: Crowdstrike'
-- 'Resources: Investigation Guide'
-- attack.t1611
 - 'Data Source: Elastic Endgame'
-- attack.persistence
+- attack.ta0005
+- attack.ta0004
+- 'Tactic: Persistence'
+- attack.ta0003
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
 level: medium
 logsource:
   category: process_creation

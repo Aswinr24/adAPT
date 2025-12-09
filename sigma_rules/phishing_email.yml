@@ -7,16 +7,15 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- Email
 - Phishing
+- Email
 level: high
 logsource:
   category: unknown
   product: linux
 detection:
   selection:
-    keywords:
-    - 'event.original: "*ML_Label=phishing*"
+    kql_query: 'event.original: "*ML_Label=phishing*"
 
       '
   condition: selection

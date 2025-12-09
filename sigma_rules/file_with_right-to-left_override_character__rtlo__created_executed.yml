@@ -10,22 +10,22 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- 'Tactic: Defense Evasion'
-- attack.t1036
-- attack.defense_evasion
-- 'OS: Windows'
-- 'Data Source: SentinelOne'
-- attack.ta0002
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
+- attack.t1204
 - 'Data Source: Microsoft Defender for Endpoint'
 - attack.ta0005
-- 'Data Source: Elastic Defend'
-- 'Domain: Endpoint'
-- 'Data Source: Elastic Endgame'
-- attack.execution
+- 'Tactic: Defense Evasion'
 - 'Data Source: Sysmon'
-- attack.t1204
+- 'Use Case: Threat Detection'
+- 'OS: Windows'
+- 'Data Source: Elastic Endgame'
+- 'Data Source: Elastic Defend'
+- attack.ta0002
+- attack.execution
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
+- attack.defense_evasion
+- attack.t1036
+- 'Data Source: SentinelOne'
 level: medium
 logsource:
   category: process_creation

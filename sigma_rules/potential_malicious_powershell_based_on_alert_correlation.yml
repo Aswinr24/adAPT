@@ -9,21 +9,32 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
+- attack.t1059
 - 'Rule Type: Higher-Order Rule'
-- 'Tactic: Execution'
+- 'Use Case: Threat Detection'
 - 'OS: Windows'
 - attack.ta0002
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- 'Domain: Endpoint'
-- attack.t1059
 - attack.execution
+- 'Domain: Endpoint'
+- 'Tactic: Execution'
+- 'Resources: Investigation Guide'
 level: high
 logsource:
   category: process_creation
   product: windows
 detection:
-  selection: {}
+  selection:
+    esql_query: "from .alerts-security.* metadata _id\n\n// Filter for PowerShell\
+      \ related alerts\n| where kibana.alert.rule.name like \"*PowerShell*\"\n\n//\
+      \ as alerts don't have non-ECS fields, parse the script block ID using grok\n\
+      | grok message \"ScriptBlock ID: (?<Esql.script_block_id>.+)\"\n| where Esql.script_block_id\
+      \ is not null\n\n// keep relevant fields for further processing\n| keep kibana.alert.rule.name,\
+      \ Esql.script_block_id, _id\n\n// count distinct alerts and filter for matches\
+      \ above the threshold\n| stats\n    Esql.kibana_alert_rule_name_count_distinct\
+      \ = count_distinct(kibana.alert.rule.name),\n    Esql.kibana_alert_rule_name_values\
+      \ = values(kibana.alert.rule.name),\n    Esql._id_values = values(_id)\n  by\
+      \ Esql.script_block_id\n\n// Apply detection threshold\n| where Esql.kibana_alert_rule_name_count_distinct\
+      \ >= 5\n"
   condition: selection
 falsepositives:
 - Unknown

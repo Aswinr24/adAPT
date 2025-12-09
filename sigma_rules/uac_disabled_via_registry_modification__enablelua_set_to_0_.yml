@@ -11,12 +11,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.ta0004
-- Windows
-- MITRE
-- attack.t1548
 - attack.privilege_escalation
+- attack.ta0004
 - Kill_chain
+- attack.t1548
+- MITRE
+- Windows
 level: high
 logsource:
   category: process_creation
@@ -25,8 +25,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - 'host.os.type:"windows" and
+    kql_query: 'host.os.type:"windows" and
 
       process.command_line: *EnableLUA* and
 

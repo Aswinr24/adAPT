@@ -13,17 +13,17 @@ references:
 - https://man7.org/linux/man-pages/man1/unshare.1.html
 - https://www.crowdstrike.com/blog/cve-2022-0185-kubernetes-container-escape-using-linux-kernel-exploit/
 tags:
-- 'Tactic: Privilege Escalation'
-- attack.ta0004
-- 'Data Source: SentinelOne'
-- attack.t1543
-- 'OS: Linux'
-- 'Use Case: Threat Detection'
 - 'Resources: Investigation Guide'
 - attack.privilege_escalation
+- attack.ta0004
+- 'Use Case: Threat Detection'
+- 'Data Source: Elastic Endgame'
 - 'Data Source: Elastic Defend'
 - 'Domain: Endpoint'
-- 'Data Source: Elastic Endgame'
+- 'Data Source: SentinelOne'
+- 'OS: Linux'
+- attack.t1543
+- 'Tactic: Privilege Escalation'
 level: medium
 logsource:
   category: process_creation

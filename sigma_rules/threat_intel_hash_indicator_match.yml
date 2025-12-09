@@ -13,10 +13,10 @@ references:
 - https://www.elastic.co/guide/en/security/current/es-threat-intel-integrations.html
 - https://www.elastic.co/security/tip
 tags:
-- 'Rule Type: Threat Match'
+- 'OS: Windows'
 - 'Data Source: Elastic Endgame'
 - 'Resources: Investigation Guide'
-- 'OS: Windows'
+- 'Rule Type: Threat Match'
 level: high
 logsource:
   category: process_creation

@@ -8,10 +8,10 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.ta0042
-- attack.t1650
 - MITRE
 - attack.resource_development
+- attack.ta0042
+- attack.t1650
 level: medium
 logsource:
   category: process_creation
@@ -21,8 +21,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - 'event.type: "start" AND
+    kql_query: 'event.type: "start" AND
 
       process.name: ("ssh-keygen" OR "ssh-keygen.exe") AND
 

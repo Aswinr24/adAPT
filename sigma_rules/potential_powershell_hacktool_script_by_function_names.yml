@@ -13,15 +13,15 @@ references:
 - https://github.com/BC-SECURITY/Empire
 - https://www.microsoft.com/en-us/security/blog/2025/05/27/new-russia-affiliated-actor-void-blizzard-targets-critical-sectors-for-espionage/
 tags:
-- 'Tactic: Execution'
+- attack.t1059
+- 'Use Case: Threat Detection'
 - 'OS: Windows'
 - attack.ta0002
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- 'Domain: Endpoint'
-- attack.t1059
 - attack.execution
+- 'Tactic: Execution'
+- 'Domain: Endpoint'
 - 'Data Source: PowerShell Logs'
+- 'Resources: Investigation Guide'
 level: medium
 logsource:
   category: process_creation
@@ -31,8 +31,7 @@ logsource:
   - logs-windows.powershell*
 detection:
   selection:
-    keywords:
-    - "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text\
+    kql_query: "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text\
       \ : (\n    \"Add-DomainGroupMember\" or \"Add-DomainObjectAcl\" or\n    \"Add-RemoteConnection\"\
       \ or \"Add-ServiceDacl\" or\n    \"Add-Win32Type\" or \"Convert-ADName\" or\n\
       \    \"Convert-LDAPProperty\" or \"ConvertFrom-LDAPLogonHours\" or\n    \"ConvertFrom-UACValue\"\

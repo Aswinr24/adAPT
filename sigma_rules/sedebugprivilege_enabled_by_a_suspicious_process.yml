@@ -12,15 +12,15 @@ references:
 - https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4703
 - https://blog.palantir.com/windows-privilege-abuse-auditing-detection-and-defense-3078a403d74e
 tags:
-- 'Data Source: Windows Security Event Logs'
-- attack.t1134
-- 'Tactic: Privilege Escalation'
-- attack.ta0004
-- 'OS: Windows'
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
 - attack.privilege_escalation
+- 'Data Source: Windows Security Event Logs'
+- attack.ta0004
+- attack.t1134
+- 'Use Case: Threat Detection'
+- 'OS: Windows'
 - 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
+- 'Tactic: Privilege Escalation'
 level: medium
 logsource:
   category: process_creation

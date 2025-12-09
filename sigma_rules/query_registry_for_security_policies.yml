@@ -10,12 +10,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.discovery
-- Windows
 - attack.ta0007
-- MITRE
 - attack.t1012
+- MITRE
 - APT29
+- Windows
+- attack.discovery
 level: low
 logsource:
   category: process_creation
@@ -24,9 +24,8 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:windows and\n(\n  (event.category : process and process.name :\
-      \ \"reg.exe\" and process.command_line : *query* and\n   process.command_line\
+    kql_query: "host.os.type:windows and\n(\n  (event.category : process and process.name\
+      \ : \"reg.exe\" and process.command_line : *query* and\n   process.command_line\
       \ : (*Policies*System* or *CurrentVersion*Run* or *SecurityProviders* or \n\
       \                           *terminal*server* or *Winlogon*)) or\n  (event.code\
       \ : \"4104\" and powershell.file.script_block_text : *Get-ItemProperty* and\n\

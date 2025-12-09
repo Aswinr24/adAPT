@@ -10,12 +10,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.defense_evasion
-- Windows
-- MITRE
-- attack.t1562
 - attack.ta0005
 - Kill_chain
+- attack.t1562
+- MITRE
+- Windows
+- attack.defense_evasion
 level: high
 logsource:
   category: process_creation
@@ -24,8 +24,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:\"windows\" and\nprocess.command_line: *Windows*Defender*Exploit*Guard*\
+    kql_query: "host.os.type:\"windows\" and\nprocess.command_line: *Windows*Defender*Exploit*Guard*\
       \ and\nprocess.command_line: *ASR* and\n(\n  process.command_line: *New-ItemProperty*\
       \ or\n  process.command_line: *Remove-ItemProperty*\n)\n"
   condition: selection

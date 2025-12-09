@@ -12,15 +12,15 @@ modified: '2025-12-05'
 references:
 - https://github.com/atc-project/atc-data/blob/master/docs/Logging_Policies/LP_0109_windows_powershell_script_block_log.md
 tags:
-- 'Tactic: Execution'
+- attack.t1059
+- 'Use Case: Threat Detection'
 - 'OS: Windows'
 - attack.ta0002
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- 'Domain: Endpoint'
-- attack.t1059
 - attack.execution
+- 'Tactic: Execution'
+- 'Domain: Endpoint'
 - 'Data Source: PowerShell Logs'
+- 'Resources: Investigation Guide'
 level: medium
 logsource:
   category: process_creation
@@ -30,8 +30,7 @@ logsource:
   - logs-windows.powershell*
 detection:
   selection:
-    keywords:
-    - "host.os.type:windows and event.category:process and\n  powershell.file.script_block_text\
+    kql_query: "host.os.type:windows and event.category:process and\n  powershell.file.script_block_text\
       \ : (\n      \"mattifestation\" or \"JosephBialek\" or\n      \"harmj0y\" or\
       \ \"ukstufus\" or\n      \"SecureThisShit\" or \"Matthew Graeber\" or\n    \
       \  \"secabstraction\" or \"mgeeky\" or\n      \"oddvarmoe\" or \"am0nsec\" or\n\

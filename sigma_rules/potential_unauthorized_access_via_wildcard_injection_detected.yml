@@ -14,23 +14,23 @@ modified: '2025-12-05'
 references:
 - https://www.exploit-db.com/papers/33930
 tags:
-- attack.t1068
-- attack.ta0006
 - 'Tactic: Credential Access'
-- 'Tactic: Privilege Escalation'
-- attack.ta0004
-- attack.credential_access
-- 'Data Source: Crowdstrike'
-- 'Data Source: SentinelOne'
-- 'OS: Linux'
-- 'Use Case: Threat Detection'
 - 'Resources: Investigation Guide'
-- attack.t1003
+- attack.privilege_escalation
 - 'Data Source: Auditd Manager'
+- attack.ta0004
+- attack.ta0006
+- attack.t1068
+- attack.t1003
+- 'Use Case: Threat Detection'
+- 'Data Source: Crowdstrike'
+- 'Data Source: Elastic Endgame'
 - 'Data Source: Elastic Defend'
 - 'Domain: Endpoint'
-- 'Data Source: Elastic Endgame'
-- attack.privilege_escalation
+- 'Data Source: SentinelOne'
+- attack.credential_access
+- 'OS: Linux'
+- 'Tactic: Privilege Escalation'
 level: low
 logsource:
   category: process_creation

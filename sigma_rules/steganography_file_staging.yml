@@ -16,13 +16,13 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.t1036
-- attack.defense_evasion
+- attack.ta0005
+- MITRE
+- APT29
 - Windows
 - attack.t1027
-- MITRE
-- attack.ta0005
-- APT29
+- attack.defense_evasion
+- attack.t1036
 level: medium
 logsource:
   category: unknown
@@ -31,8 +31,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:windows and event.code : \"4104\" and\n(\n  (powershell.file.script_block_text\
+    kql_query: "host.os.type:windows and event.code : \"4104\" and\n(\n  (powershell.file.script_block_text\
       \ : *System.Drawing.Bitmap* and \n   powershell.file.script_block_text : *GetPixel*\
       \ and \n   (powershell.file.script_block_text : *IEX* or powershell.file.script_block_text\
       \ : *Invoke-Expression*)) or\n\n  (powershell.file.script_block_text : *Bitmap*\

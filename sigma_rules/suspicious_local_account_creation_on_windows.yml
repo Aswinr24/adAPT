@@ -12,11 +12,11 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.ta0004
-- MITRE
 - attack.privilege_escalation
-- attack.t1078
+- attack.ta0004
 - Kill_chain
+- attack.t1078
+- MITRE
 level: high
 logsource:
   category: unknown
@@ -25,8 +25,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "event.code: \"4720\" \n  and event.outcome: \"success\" \n  and winlog.event_data.TargetUserName:\
+    kql_query: "event.code: \"4720\" \n  and event.outcome: \"success\" \n  and winlog.event_data.TargetUserName:\
       \ *\n  and not winlog.event_data.SubjectUserName: (\"SYSTEM\" or \"LOCAL SERVICE\"\
       \ or \"NETWORK SERVICE\")"
   condition: selection

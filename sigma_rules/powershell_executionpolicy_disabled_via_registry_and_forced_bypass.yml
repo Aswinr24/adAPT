@@ -21,12 +21,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.defense_evasion
-- Windows
-- MITRE
-- attack.t1562
 - attack.ta0005
 - Kill_chain
+- attack.t1562
+- MITRE
+- Windows
+- attack.defense_evasion
 level: high
 logsource:
   category: process_creation
@@ -35,10 +35,9 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:\"windows\" and\nprocess.command_line: *ExecutionPolicy* and\n\
-      (\n  process.command_line: \"*HKLM:\\\\Software\\\\Policies\\\\Microsoft\\\\\
-      Windows\\\\PowerShell*\" or\n  process.command_line: *Set-ExecutionPolicy*\n\
+    kql_query: "host.os.type:\"windows\" and\nprocess.command_line: *ExecutionPolicy*\
+      \ and\n(\n  process.command_line: \"*HKLM:\\\\Software\\\\Policies\\\\Microsoft\\\
+      \\Windows\\\\PowerShell*\" or\n  process.command_line: *Set-ExecutionPolicy*\n\
       ) and\n(\n  process.command_line: *Wscript.Shell* or\n  process.command_line:\
       \ *sendkeys*\n)\n"
   condition: selection

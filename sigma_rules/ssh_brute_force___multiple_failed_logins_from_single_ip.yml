@@ -7,9 +7,9 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
+- attack.ta0006
 - attack.t1110
 - attack.credential_access
-- attack.ta0006
 level: medium
 logsource:
   category: unknown

@@ -14,12 +14,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- Windows
+- attack.t1566
+- APT36
 - attack.ta0001
 - MITRE
 - attack.initial_access
-- attack.t1566
-- APT36
+- Windows
 level: high
 logsource:
   category: process_creation
@@ -28,9 +28,8 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type: \"windows\" and\nprocess.command_line: *Invoke-MalDoc* and\n\
-      process.command_line: (*Word* or *officeProduct*) and\n(\n  process.command_line:\
+    kql_query: "host.os.type: \"windows\" and\nprocess.command_line: *Invoke-MalDoc*\
+      \ and\nprocess.command_line: (*Word* or *officeProduct*) and\n(\n  process.command_line:\
       \ *iwr* or\n  process.command_line: *Shell* or\n  process.command_line: *ping*\n\
       )\n"
   condition: selection

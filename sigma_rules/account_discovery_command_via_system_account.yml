@@ -10,20 +10,20 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- 'Tactic: Privilege Escalation'
-- 'Tactic: Discovery'
-- attack.ta0004
-- attack.discovery
-- 'OS: Windows'
 - attack.ta0007
-- attack.t1033
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
 - attack.privilege_escalation
-- 'Data Source: Elastic Defend'
-- 'Domain: Endpoint'
+- attack.ta0004
 - attack.t1078
 - 'Data Source: Sysmon'
+- 'Use Case: Threat Detection'
+- 'OS: Windows'
+- attack.discovery
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Defend'
+- attack.t1033
+- 'Tactic: Discovery'
+- 'Resources: Investigation Guide'
+- 'Tactic: Privilege Escalation'
 level: low
 logsource:
   category: process_creation

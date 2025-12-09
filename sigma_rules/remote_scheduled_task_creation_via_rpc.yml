@@ -9,18 +9,18 @@ date: '2025-12-09'
 modified: '2025-12-05'
 references: []
 tags:
-- 'Data Source: Windows Security Event Logs'
 - attack.ta0008
+- 'Data Source: Windows Security Event Logs'
+- attack.t1053
 - attack.t1021
+- 'Tactic: Lateral Movement'
+- attack.lateral_movement
+- 'Use Case: Threat Detection'
 - 'OS: Windows'
 - attack.ta0002
-- attack.t1053
-- 'Use Case: Threat Detection'
-- 'Resources: Investigation Guide'
-- attack.lateral_movement
-- 'Domain: Endpoint'
 - attack.execution
-- 'Tactic: Lateral Movement'
+- 'Domain: Endpoint'
+- 'Resources: Investigation Guide'
 level: medium
 logsource:
   category: process_creation

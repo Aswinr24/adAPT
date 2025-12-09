@@ -9,11 +9,11 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- MITRE
-- attack.ta0002
-- Kill_chain
 - attack.t1059
+- Kill_chain
+- MITRE
 - attack.execution
+- attack.ta0002
 level: medium
 logsource:
   category: process_creation
@@ -22,8 +22,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - "host.os.type:\"windows\" and event.code:\"403\" and\n(\n  process.command_line:\
+    kql_query: "host.os.type:\"windows\" and event.code:\"403\" and\n(\n  process.command_line:\
       \ *Invoke-Command* or\n  process.command_line: *ICM* or\n  process.command_line:\
       \ *Invoke-Expression*\n) and (\n  process.command_line: *Get-Process* or\n \
       \ process.command_line: *gps*\n) and\nprocess.command_line: *IncludeUserName*\

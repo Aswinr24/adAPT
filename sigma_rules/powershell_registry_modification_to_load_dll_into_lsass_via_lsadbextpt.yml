@@ -15,12 +15,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.ta0003
-- Windows
-- MITRE
-- Kill_chain
 - attack.persistence
+- Kill_chain
+- attack.ta0003
+- MITRE
 - attack.t1547
+- Windows
 level: high
 logsource:
   category: process_creation
@@ -29,8 +29,7 @@ logsource:
   - winlogbeat-*
 detection:
   selection:
-    keywords:
-    - 'host.os.type:"windows" and
+    kql_query: 'host.os.type:"windows" and
 
       process.command_line: *LsaDbExtPt* and
 

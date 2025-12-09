@@ -8,12 +8,12 @@ date: '2025-12-09'
 modified: '2025-12-08'
 references: []
 tags:
-- attack.t1074
 - Linux
+- attack.ta0009
+- Auditbeat
 - MITRE
 - attack.collection
-- Auditbeat
-- attack.ta0009
+- attack.t1074
 level: high
 logsource:
   category: process_creation
@@ -22,8 +22,7 @@ logsource:
   - auditbeat-*
 detection:
   selection:
-    keywords:
-    - "agent.type: \"auditbeat\" AND\nevent.action: \"executed\" AND\nprocess.name:\
+    kql_query: "agent.type: \"auditbeat\" AND\nevent.action: \"executed\" AND\nprocess.name:\
       \ (\"cp\" OR \"mv\" OR \"rsync\" OR \"cat\" OR \"dd\") AND\nprocess.args: (\"\
       /tmp/*\" OR \"/var/tmp/*\" OR \"/dev/shm/*\" OR \"/run/shm/*\") AND\nprocess.args:\
       \ (\n    \"*.tar.gz\" OR \"*.zip\" OR \"*.gz\" OR \"*.rar\" OR\n    \"*id_rsa*\"\
