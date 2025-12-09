@@ -1,0 +1,61 @@
+title: File Creation Time Changed
+id: 166727ab-6768-4e26-b80c-948b228ffc06
+status: stable
+description: Identifies modification of a file creation time. Adversaries may modify
+  file time attributes to blend malicious content with existing files. Timestomping
+  is a technique that modifies the timestamps of a file often to mimic files that
+  are in trusted directories.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references: []
+tags:
+- 'Tactic: Defense Evasion'
+- attack.defense_evasion
+- 'OS: Windows'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.ta0005
+- 'Domain: Endpoint'
+- attack.t1070
+- 'Data Source: Sysmon'
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+  - logs-windows.sysmon_operational-*
+detection:
+  selection:
+    eql_query: "file where host.os.type == \"windows\" and\n  event.provider == \"\
+      Microsoft-Windows-Sysmon\" and\n  /* File creation time change */\n  event.code\
+      \ == \"2\" and\n  not process.executable :\n           (\"?:\\\\Program Files\\\
+      \\*\",\n            \"?:\\\\Program Files (x86)\\\\*\",\n            \"?:\\\\\
+      Windows\\\\system32\\\\cleanmgr.exe\",\n            \"?:\\\\Windows\\\\system32\\\
+      \\msiexec.exe\",\n            \"?:\\\\Windows\\\\syswow64\\\\msiexec.exe\",\n\
+      \            \"?:\\\\Windows\\\\system32\\\\svchost.exe\",\n            \"?:\\\
+      \\WINDOWS\\\\system32\\\\backgroundTaskHost.exe\",\n            \"?:\\\\Users\\\
+      \\*\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe\",\n\
+      \            \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\Mozilla Firefox\\\\firefox.exe\"\
+      ,\n            \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\slack\\\\app-*\\\\\
+      slack.exe\",\n            \"?:\\\\Users\\\\*\\\\AppData\\\\Local\\\\GitHubDesktop\\\
+      \\app-*\\\\GitHubDesktop.exe\",\n            \"?:\\\\Users\\\\*\\\\AppData\\\
+      \\Local\\\\Microsoft\\\\Teams\\\\current\\\\Teams.exe\",\n            \"?:\\\
+      \\Users\\\\*\\\\AppData\\\\Local\\\\Microsoft\\\\OneDrive\\\\OneDrive.exe\"\
+      ) and\n  not file.extension : (\"temp\", \"tmp\", \"~tmp\", \"xml\", \"newcfg\"\
+      ) and not user.name : (\"SYSTEM\", \"Local Service\", \"Network Service\") and\n\
+      \  not file.name : (\"LOG\", \"temp-index\", \"license.rtf\", \"iconcache_*.db\"\
+      )\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.code
+- event.provider
+- file.extension
+- file.name
+- host.os.type
+- process.executable
+- user.name

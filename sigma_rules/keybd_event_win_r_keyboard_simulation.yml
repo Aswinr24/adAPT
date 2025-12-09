@@ -1,0 +1,39 @@
+title: Keybd_Event Win+R Keyboard Simulation
+id: b66e54dc-a07c-4d35-ba50-102bb9b940fd
+status: stable
+description: 'Detects keybd_event DLL import with Win+R keyboard simulation for paste-and-run
+  attacks.
+
+  APT36 simulates keyboard input (Win+R) to open Run dialog, then uses SendKeys to
+  paste and execute commands.
+
+  This bypasses user awareness by automating the clipboard-paste attack flow.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- attack.ta0001
+- MITRE
+- attack.initial_access
+- attack.t1566
+- APT36
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\n(\n  (process.command_line:\
+      \ *Add-Type* AND process.command_line: *DllImport* AND process.command_line:\
+      \ *keybd_event*) OR\n  (process.command_line: *SendKeys* AND process.command_line:\
+      \ *ToBase64String*) OR\n  (process.command_line: *user32.dll* AND process.command_line:\
+      \ *keybd_event* AND process.command_line: *SendKeys*)\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

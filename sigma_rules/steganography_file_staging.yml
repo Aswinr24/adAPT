@@ -1,0 +1,46 @@
+title: Steganography File Staging
+id: f5360644-d7ed-4bf9-865e-33c19633ee04
+status: stable
+description: 'Detects staging of files disguised with legitimate extensions like .png
+  for steganography.
+
+  APT29 stages a ''monkey.png'' file containing hidden encoded payloads that are later
+  decoded
+
+  using System.Drawing.Bitmap and GetPixel operations. This technique hides malicious
+  code
+
+  inside seemingly innocent image files.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.t1036
+- attack.defense_evasion
+- Windows
+- attack.t1027
+- MITRE
+- attack.ta0005
+- APT29
+level: medium
+logsource:
+  category: unknown
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and event.code : \"4104\" and\n(\n  (powershell.file.script_block_text\
+      \ : *System.Drawing.Bitmap* and \n   powershell.file.script_block_text : *GetPixel*\
+      \ and \n   (powershell.file.script_block_text : *IEX* or powershell.file.script_block_text\
+      \ : *Invoke-Expression*)) or\n\n  (powershell.file.script_block_text : *Bitmap*\
+      \ and \n   powershell.file.script_block_text : *GetPixel* and \n   powershell.file.script_block_text\
+      \ : *Byte* and\n   powershell.file.script_block_text : *GetString*) or\n\n \
+      \ (powershell.file.script_block_text : *Drawing.Bitmap* and \n   powershell.file.script_block_text\
+      \ : *ASCII* and\n   powershell.file.script_block_text : *GetString*)\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

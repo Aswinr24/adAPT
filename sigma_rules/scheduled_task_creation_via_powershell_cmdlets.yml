@@ -1,0 +1,48 @@
+title: Scheduled Task Creation via PowerShell Cmdlets
+id: 34a95d73-9dda-4a91-bc26-461cee560102
+status: stable
+description: 'Detects creation of scheduled tasks using PowerShell cmdlets (Register-ScheduledTask,
+  New-ScheduledTaskAction,
+
+  New-ScheduledTaskTrigger). APT28 and other threat actors use scheduled tasks for
+  persistence, ensuring their
+
+  malicious payloads execute automatically at system startup, user logon, or at specified
+  intervals.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0003
+- Persistance
+- Windows
+- MITRE
+- attack.ta0002
+- attack.t1053
+- attack.execution
+- attack.persistence
+- APT28
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "event.category:process and host.os.type:windows and\n  (\n    process.command_line\
+      \ : *Register-ScheduledTask* or\n    (process.command_line : *New-ScheduledTaskAction*\
+      \ and process.command_line : *New-ScheduledTaskTrigger*) or\n    process.args\
+      \ : *Register-ScheduledTask* or\n    (process.args : *New-ScheduledTaskAction*\
+      \ and process.args : *New-ScheduledTaskTrigger*)\n  ) and\n  not process.parent.executable\
+      \ : (\"C:\\\\Windows\\\\System32\\\\*\" or \"C:\\\\Program Files\\\\*\" or \"\
+      C:\\\\Program Files (x86)\\\\*\") and\n  not process.command_line : (*Microsoft*\
+      \ or *Windows Defender* or *WindowsUpdate* or *GoogleUpdate* or *Adobe* or *OneDrive*\
+      \ or *Teams* or *Office*) and\n  not user.name : (\"SYSTEM\" or \"LOCAL SERVICE\"\
+      \ or \"NETWORK SERVICE\")"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

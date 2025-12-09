@@ -1,0 +1,39 @@
+title: Word Spawning Command Shell With External IP in Command Line
+id: 4778a971-f480-48e5-8a09-74e4530c8aec
+status: stable
+description: 'Detects Microsoft Word launching PowerShell or another shell interpreter
+  that references an external IP address in the command line.
+
+  This behavior is commonly associated with malicious macro execution, weaponized
+  Office documents, and phishing attachments that attempt to execute payloads through
+  PowerShell or CMD. The detection identifies PowerShell invoked via Word and containing
+  suspicious indicators such as ping, external IPs, Invoke-MalDoc, or download-and-execute
+  patterns.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- attack.ta0001
+- MITRE
+- attack.initial_access
+- attack.t1566
+- APT36
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\" and\nprocess.command_line: *Invoke-MalDoc* and\n\
+      process.command_line: (*Word* or *officeProduct*) and\n(\n  process.command_line:\
+      \ *iwr* or\n  process.command_line: *Shell* or\n  process.command_line: *ping*\n\
+      )\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

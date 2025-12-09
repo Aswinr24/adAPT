@@ -1,0 +1,44 @@
+title: Potential Pass-the-Hash (PtH) Attempt
+id: daafdf96-e7b1-4f14-b494-27e0d24b11f6
+status: stable
+description: Adversaries may pass the hash using stolen password hashes to move laterally
+  within an environment, bypassing normal system access controls. Pass the hash (PtH)
+  is a method of authenticating as a user without having access to the user's cleartext
+  password.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://attack.mitre.org/techniques/T1550/002/
+tags:
+- 'Data Source: Windows Security Event Logs'
+- attack.ta0008
+- attack.t1550
+- 'OS: Windows'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.lateral_movement
+- 'Domain: Endpoint'
+- 'Tactic: Lateral Movement'
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+  - logs-windows.forwarded*
+  - logs-system.security*
+detection:
+  selection: {}
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- event.category
+- event.outcome
+- host.os.type
+- user.id
+- winlog.event_data.LogonProcessName
+- winlog.logon.type

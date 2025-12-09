@@ -1,0 +1,39 @@
+title: System Owner/User Discovery
+id: a4c59bdf-c2e5-4d8b-9477-67a0857b1a5d
+status: stable
+description: "Detects system owner/user discovery commands. APT29 uses 'echo %USERDOMAIN%\\\
+  \\%USERNAME%' \nto identify the current user and domain context. This technique\
+  \ helps attackers understand\ntheir current access level and plan privilege escalation\
+  \ or lateral movement."
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.discovery
+- Windows
+- MITRE
+- attack.ta0007
+- attack.t1033
+- APT29
+level: low
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\" and\n(\n  (\n    event.category: process and process.name:\
+      \ \"cmd.exe\" and \n    (\n      process.command_line : \"*%USERNAME%*\" or\n\
+      \      process.command_line : \"*%USERDOMAIN%*\" or\n      process.command_line\
+      \ : \"*%USERPROFILE%*\"\n    )\n  ) or\n\n  (event.category: process and process.name:\
+      \ \"whoami.exe\") or\n\n  (\n    event.code: 4104 and \n    (\n      powershell.file.script_block_text\
+      \ : \"*$env:USERNAME*\" or\n      powershell.file.script_block_text : \"*$env:USERDOMAIN*\"\
+      \ or\n      powershell.file.script_block_text : \"*[Environment]::UserName*\"\
+      \n    )\n  )\n)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

@@ -1,0 +1,28 @@
+title: SSH Brute Force – Multiple Failed Logins from Single IP
+id: 8f132122-2416-4eb4-8f87-9702e130ca7b
+status: stable
+description: Multiple Failed Logins from Single IP indicating Classic SSH Bruteforce
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.t1110
+- attack.credential_access
+- attack.ta0006
+level: medium
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+detection:
+  selection:
+    eql_query: "sequence by source.ip, user.name with maxspan=10m\n  [ authentication\n\
+      \      where event.dataset == \"login\"\n      and event.category == \"authentication\"\
+      \n      and event.outcome == \"failure\"\n      and event.type == \"authentication_failure\"\
+      \n  ] with runs=5"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

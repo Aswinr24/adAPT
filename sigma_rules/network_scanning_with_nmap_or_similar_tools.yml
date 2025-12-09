@@ -1,0 +1,35 @@
+title: Network Scanning with Nmap or Similar Tools
+id: 834f8750-9075-4e4b-87d4-f04129f18bd8
+status: stable
+description: Detects network scanning activity to gather victim host information (T1592)
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0043
+- attack.t1592
+- MITRE
+- attack.reconnaissance
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - winlogbeat-*
+  - auditbeat-*
+  - zeek-*
+detection:
+  selection:
+    keywords:
+    - "event.category: process AND event.type: start AND\n(\n  process.name: (\n \
+      \   \"nmap\" OR \"masscan\" OR \"zmap\" OR \"unicornscan\" OR\n    \"nmap.exe\"\
+      \ OR \"masscan.exe\" OR \"angry_ip_scanner.exe\" OR\n    \"Advanced Port Scanner.exe\"\
+      \n  )\n  OR\n  process.command_line: (\n    \"*port*scan*\" OR \"*host*discovery*\"\
+      \ OR \"*-sS*\" OR \"*-sT*\" OR \"*-sU*\" OR\n    \"*-sV*\" OR \"*-O*\" OR \"\
+      *--script*\"\n  )\n)\nAND NOT user.name: (\"nessus\" OR \"qualys\" OR \"rapid7\"\
+      \ OR \"openvas\")\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

@@ -1,0 +1,55 @@
+title: File with Right-to-Left Override Character (RTLO) Created/Executed
+id: 7e763fd1-228a-4d43-be88-3ffc14cd7de1
+status: stable
+description: Identifies the creation or execution of files or processes with names
+  containing the Right-to-Left Override (RTLO) character, which can be used to disguise
+  the file extension and trick users into executing malicious files.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references: []
+tags:
+- 'Tactic: Defense Evasion'
+- attack.t1036
+- attack.defense_evasion
+- 'OS: Windows'
+- 'Data Source: SentinelOne'
+- attack.ta0002
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Data Source: Microsoft Defender for Endpoint'
+- attack.ta0005
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Endgame'
+- attack.execution
+- 'Data Source: Sysmon'
+- attack.t1204
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+  - logs-endpoint.events.process-*
+  - logs-endpoint.events.file-*
+  - logs-windows.sysmon_operational-*
+  - logs-m365_defender.event-*
+  - logs-sentinel_one_cloud_funnel.*
+  - endgame-*
+detection:
+  selection:
+    eql_query: "any where host.os.type == \"windows\" and event.category in (\"file\"\
+      , \"process\") and \n  (\n    (event.type == \"creation\" and file.path : \"\
+      *\\u{202E}*\") or \n    (event.type == \"start\" and process.name : \"*\\u{202E}*\"\
+      )\n  )\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.category
+- event.type
+- file.path
+- host.os.type
+- process.name

@@ -1,0 +1,31 @@
+title: SSH Low-and-Slow Brute Force
+id: d122fe88-f20d-4b19-b371-7a01fd464522
+status: stable
+description: Low-and-Slow Brute Force – Multiple Failures Over Extended Window
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0006
+- SSH
+- attack.t1110
+- attack.credential_access
+- Linux
+- MITRE
+level: medium
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+detection:
+  selection:
+    eql_query: "sequence by source.ip, user.name with maxspan=6h\n  [ authentication\
+      \ \n      where event.category == \"authentication\" \n      and event.outcome\
+      \ == \"failure\" \n      and not user.name in (\"root\", \"admin\") \n  ] with\
+      \ runs=10"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

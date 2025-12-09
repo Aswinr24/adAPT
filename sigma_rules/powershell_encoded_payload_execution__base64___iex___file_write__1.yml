@@ -1,0 +1,40 @@
+title: PowerShell Encoded Payload Execution (Base64 → IEX / File Write)
+id: c96f5b7d-1f05-45af-8896-f46b05c1975b
+status: stable
+description: 'Detects decoding of base64/encrypted data to file output in PowerShell.
+
+  APT36 uses FromBase64String and ConvertTo-SecureString to decode/decrypt embedded
+  payloads, then writes to file with Out-File.
+
+  This combines encoding bypass with file persistence for malware staging.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.defense_evasion
+- Windows
+- attack.t1027
+- MITRE
+- attack.ta0002
+- attack.ta0005
+- attack.t1059
+- attack.execution
+- APT36
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\nprocess.command_line:\
+      \ *FromBase64String* AND\n(\n  process.command_line: (*Out-File* OR *Set-Content*)\
+      \ OR\n  process.command_line: (*Invoke-Expression* OR *IEX* OR *iex*) OR\n \
+      \ process.command_line: (*Start-Process* OR *& * OR *. *)\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

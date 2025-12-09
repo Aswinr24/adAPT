@@ -1,0 +1,73 @@
+title: Account Discovery Command via SYSTEM Account
+id: 2856446a-34e6-435b-9fb5-f8f040bfa7ed
+status: stable
+description: Identifies when the SYSTEM account uses an account discovery utility.
+  This could be a sign of discovery activity after an adversary has achieved privilege
+  escalation.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references: []
+tags:
+- 'Tactic: Privilege Escalation'
+- 'Tactic: Discovery'
+- attack.ta0004
+- attack.discovery
+- 'OS: Windows'
+- attack.ta0007
+- attack.t1033
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.privilege_escalation
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- attack.t1078
+- 'Data Source: Sysmon'
+level: low
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+  - logs-endpoint.events.process-*
+  - logs-windows.sysmon_operational-*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"windows\" and event.type == \"start\"\
+      \ and\n  (?process.Ext.token.integrity_level_name : \"System\" or\n  ?winlog.event_data.IntegrityLevel\
+      \ : \"System\") and\n  (\n    process.name : \"whoami.exe\" or\n    (\n    \
+      \  process.name : \"net1.exe\" and not process.parent.name : \"net.exe\" and\
+      \ not process.args : (\"start\", \"stop\", \"/active:*\")\n    )\n  ) and \n\
+      process.parent.executable != null and \nnot (process.name : \"net1.exe\" and\
+      \ process.working_directory : \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender\
+      \ Advanced Threat Protection\\\\Downloads\\\\\") and \nnot process.parent.executable\
+      \ : \n                (\"C:\\\\Program Files\\\\Microsoft Monitoring Agent\\\
+      \\Agent\\\\MonitoringHost.exe\", \n                 \"C:\\\\Program Files\\\\\
+      Dell\\\\SupportAssistAgent\\\\SRE\\\\SRE.exe\", \n                 \"C:\\\\\
+      Program Files\\\\Obkio Agent\\\\main.dist\\\\ObkioAgentSoftware.exe\", \n  \
+      \               \"C:\\\\Windows\\\\Temp\\\\WinGet\\\\defaultState\\\\PostgreSQL.PostgreSQL*\\\
+      \\postgresql-*-windows-x64.exe\", \n                 \"C:\\\\Program Files\\\
+      \\Obkio Agent\\\\main.dist\\\\ObkioAgentSoftware.exe\", \n                 \"\
+      C:\\\\Program Files (x86)\\\\SolarWinds\\\\Agent\\\\Plugins\\\\JobEngine\\\\\
+      SWJobEngineWorker2.exe\") and \nnot (process.parent.executable : \"C:\\\\Windows\\\
+      \\Sys?????\\\\WindowsPowerShell\\\\v1.0\\\\powershell.exe\" and \n     process.parent.args\
+      \ : (\"C:\\\\Program Files (x86)\\\\Microsoft Intune Management Extension\\\\\
+      *.ps1\", \n                            \"Agent\\\\Modules\\\\AdHealthConfiguration\\\
+      \\AdHealthConfiguration.psd1'\")) and \nnot (process.parent.name : \"cmd.exe\"\
+      \ and process.working_directory : \"C:\\\\Program Files\\\\Infraon Corp\\\\\
+      SecuraAgent\\\\\")\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.type
+- host.os.type
+- process.Ext.token.integrity_level_name
+- process.args
+- process.name
+- process.parent.args
+- process.parent.executable
+- process.parent.name
+- process.working_directory
+- winlog.event_data.IntegrityLevel

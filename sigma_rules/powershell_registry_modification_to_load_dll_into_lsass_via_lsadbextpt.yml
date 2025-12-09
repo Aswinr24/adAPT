@@ -1,0 +1,45 @@
+title: PowerShell Registry Modification to Load DLL into LSASS via LsaDbExtPt
+id: c5a5c420-5bef-4d7c-a1c2-f161016cde7f
+status: stable
+description: 'This rule detects modification of the Windows Registry value LsaDbExtPt
+  under:
+
+
+  HKLM\SYSTEM\CurrentControlSet\Services\NTDS
+
+
+  This registry key forces LSASS (Local Security Authority Subsystem Service) to load
+  an arbitrary DLL during system startup.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0003
+- Windows
+- MITRE
+- Kill_chain
+- attack.persistence
+- attack.t1547
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'host.os.type:"windows" and
+
+      process.command_line: *LsaDbExtPt* and
+
+      process.command_line: *New-ItemProperty* and
+
+      process.command_line: *Services\\NTDS*
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

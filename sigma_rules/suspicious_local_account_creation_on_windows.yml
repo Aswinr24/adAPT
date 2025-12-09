@@ -1,0 +1,35 @@
+title: Suspicious Local Account Creation on Windows
+id: bff08610-a62c-4b86-9131-54dae0d02b66
+status: stable
+description: 'This rule monitors Windows Security Event ID 4720, which logs whenever
+  a new local account is created.
+
+  It alerts when the creator is an administrator-level account and the new account
+  shows anomalous properties (e.g., password not set, disabled state, or created by
+  built-in Administrator).'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0004
+- MITRE
+- attack.privilege_escalation
+- attack.t1078
+- Kill_chain
+level: high
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "event.code: \"4720\" \n  and event.outcome: \"success\" \n  and winlog.event_data.TargetUserName:\
+      \ *\n  and not winlog.event_data.SubjectUserName: (\"SYSTEM\" or \"LOCAL SERVICE\"\
+      \ or \"NETWORK SERVICE\")"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

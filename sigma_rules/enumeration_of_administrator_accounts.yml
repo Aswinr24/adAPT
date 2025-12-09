@@ -1,0 +1,60 @@
+title: Enumeration of Administrator Accounts
+id: 871ea072-1b71-4def-b016-6278b505138d
+status: stable
+description: Identifies instances of lower privilege accounts enumerating Administrator
+  accounts or groups using built-in Windows tools.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references: []
+tags:
+- 'Data Source: Windows Security Event Logs'
+- 'Tactic: Discovery'
+- attack.t1087
+- attack.discovery
+- 'OS: Windows'
+- 'Data Source: Crowdstrike'
+- attack.ta0007
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Data Source: Microsoft Defender for Endpoint'
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Endgame'
+- attack.t1069
+level: low
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - endgame-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process-*
+  - logs-m365_defender.event-*
+  - logs-system.security*
+  - logs-windows.forwarded*
+  - winlogbeat-*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"windows\" and event.type == \"start\"\
+      \ and\n(\n  (\n    (\n      (process.name : \"net.exe\" or ?process.pe.original_file_name\
+      \ == \"net.exe\") or\n      ((process.name : \"net1.exe\" or ?process.pe.original_file_name\
+      \ == \"net1.exe\") and not process.parent.name : \"net.exe\")\n    ) and\n \
+      \   process.args : (\"group\", \"user\", \"localgroup\") and\n    process.args\
+      \ : (\"*admin*\", \"Domain Admins\", \"Remote Desktop Users\", \"Enterprise\
+      \ Admins\", \"Organization Management\")\n    and not process.args : (\"/add\"\
+      , \"/delete\")\n  ) or\n  (\n    (process.name : \"wmic.exe\" or ?process.pe.original_file_name\
+      \ == \"wmic.exe\") and\n    process.args : (\"group\", \"useraccount\")\n  )\n\
+      ) and not user.id : (\"S-1-5-18\", \"S-1-5-19\", \"S-1-5-20\")\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.type
+- host.os.type
+- process.args
+- process.name
+- process.parent.name
+- process.pe.original_file_name
+- user.id

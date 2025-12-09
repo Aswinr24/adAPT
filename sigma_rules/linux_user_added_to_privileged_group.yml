@@ -1,0 +1,54 @@
+title: Linux User Added to Privileged Group
+id: 43d6ec12-2b1c-47b5-8f35-e9de65551d3b
+status: stable
+description: Identifies attempts to add a user to a privileged group. Attackers may
+  add users to a privileged group in order to establish persistence on a system.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.elastic.co/security-labs/primer-on-persistence-mechanisms
+tags:
+- 'Tactic: Persistence'
+- attack.ta0003
+- 'Data Source: Crowdstrike'
+- 'Data Source: SentinelOne'
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Data Source: Auditd Manager'
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Endgame'
+- attack.persistence
+- attack.t1136
+level: low
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - endgame-*
+  - logs-auditd_manager.auditd-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process*
+  - logs-sentinel_one_cloud_funnel.*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"linux\" and event.type == \"start\"\
+      \ and\n  event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\"\
+      , \"executed\", \"process_started\") and\n  process.args in (\n    \"root\"\
+      , \"admin\", \"wheel\", \"staff\", \"sudo\",\"disk\", \"video\", \"shadow\"\
+      , \"lxc\", \"lxd\"\n  ) and\n  (\n    process.name in (\"usermod\", \"adduser\"\
+      ) or\n    (process.name == \"gpasswd\" and process.args in (\"-a\", \"--add\"\
+      , \"-M\", \"--members\"))\n  )\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- event.type
+- host.os.type
+- process.args
+- process.name

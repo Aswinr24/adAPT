@@ -1,0 +1,45 @@
+title: T1005 – Data from Local System
+id: 0e758535-6632-431c-8fc3-cee140ea4cb2
+status: stable
+description: Data from Local System (Find Files)
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- T1005
+- Linux
+- MITRE
+- attack.collection
+- Auditbeat
+- attack.ta0009
+- attack.t1005
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+detection:
+  selection:
+    keywords:
+    - "event.category: \"process\" AND event.type: \"start\" AND\nprocess.name: (\"\
+      find\" or \"grep\" or \"locate\") AND (\n\n  process.args: (\n    \"*id_rsa*\"\
+      \ or \"*.pem\" or \"*.ppk*\" or \"*.key\" or\n    \"*shadow*\" or \"*.kdbx*\"\
+      \ or \"*credentials*\" or\n    \"*signons.sqlite*\" or \"*.aws/credentials*\"\
+      \ or \"*.kube/config*\" or\n    \"*.env\" or \"*config.php*\" or \"*wp-config.php*\"\
+      \ or \"*.bash_history*\"\n  )\n\n  OR\n\n  (\n    process.args: (\"*.yml\" or\
+      \ \"*.yaml\" or \"*.json\" or \"*.env\") AND\n    process.args: (\"/etc/*\"\
+      \ or \"/root/*\" or \"/home/*\" or \"/var/www/*\")\n  )\n\n  OR\n  process.title:\
+      \ (\n    \"find /root/*\" or \"find /etc/*\" or \"find /home/*\" or \"find /var/www/*\"\
+      \ or\n    \"*grep -R /root/*\" or \"*grep -R /etc/*\"\n  )\n\n  OR\n\n  (\n\
+      \    process.title: (\"find /\" or \"find / *\" or \"grep -R /*\") AND\n   \
+      \ NOT user.id: \"0\" AND\n    NOT process.title: \"*updatedb*\" AND\n    NOT\
+      \ process.title: \"*locate.updatedb*\" AND\n    NOT process.title: \"*apt*\"\
+      \ AND\n    NOT process.title: \"*dpkg*\" AND\n    NOT process.title: \"*systemd*\"\
+      \ AND\n    NOT process.title: \"*update-notifier*\" AND\n    NOT process.title:\
+      \ \"*cron*\"\n  )\n)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

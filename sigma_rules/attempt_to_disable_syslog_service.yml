@@ -1,0 +1,53 @@
+title: Attempt to Disable Syslog Service
+id: 2f8a1226-5720-437d-9c20-e0029deb6194
+status: stable
+description: Adversaries may attempt to disable the syslog service in an attempt to
+  an attempt to disrupt event logging and evade detection by security controls.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.elastic.co/security-labs/detecting-log4j2-with-elastic-security
+tags:
+- 'Tactic: Defense Evasion'
+- attack.defense_evasion
+- 'Data Source: Crowdstrike'
+- 'Data Source: SentinelOne'
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.t1562
+- attack.ta0005
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Endgame'
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - endgame-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process*
+  - logs-sentinel_one_cloud_funnel.*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"linux\" and event.action in (\"exec\"\
+      , \"exec_event\", \"start\", \"ProcessRollup2\") and\n ( (process.name == \"\
+      service\" and process.args == \"stop\") or\n   (process.name == \"chkconfig\"\
+      \ and process.args == \"off\") or\n   (process.name == \"systemctl\" and process.args\
+      \ in (\"disable\", \"stop\", \"kill\"))\n ) and process.args in (\"syslog\"\
+      , \"rsyslog\", \"syslog-ng\", \"syslog.service\", \"rsyslog.service\", \"syslog-ng.service\"\
+      ) and\nnot (\n  process.parent.name == \"rsyslog-rotate\" or\n  process.args\
+      \ == \"HUP\"\n)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- host.os.type
+- process.args
+- process.name
+- process.parent.name

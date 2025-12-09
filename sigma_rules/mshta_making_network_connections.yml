@@ -1,0 +1,55 @@
+title: Mshta Making Network Connections
+id: c2d90150-0133-451c-a783-533e736c12d7
+status: stable
+description: Identifies Mshta.exe making outbound network connections. This may indicate
+  adversarial activity, as Mshta is often leveraged by adversaries to execute malicious
+  scripts and evade detection.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-06'
+references:
+- https://www.elastic.co/security-labs/elastic-protects-against-data-wiper-malware-targeting-ukraine-hermeticwiper
+tags:
+- attack.t1218
+- 'Tactic: Defense Evasion'
+- attack.defense_evasion
+- 'OS: Windows'
+- 'Data Source: SentinelOne'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.ta0005
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Sysmon'
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - logs-endpoint.events.process-*
+  - logs-endpoint.events.network-*
+  - winlogbeat-*
+  - logs-windows.sysmon_operational-*
+  - logs-sentinel_one_cloud_funnel.*
+detection:
+  selection:
+    eql_query: "sequence by process.entity_id with maxspan=10m\n  [process where host.os.type\
+      \ == \"windows\" and event.type == \"start\" and process.name : \"mshta.exe\"\
+      \ and\n     not process.parent.name : \"Microsoft.ConfigurationManagement.exe\"\
+      \ and\n     not (process.parent.executable : \"C:\\\\Amazon\\\\Amazon Assistant\\\
+      \\amazonAssistantService.exe\" or\n          process.parent.executable : \"\
+      C:\\\\TeamViewer\\\\TeamViewer.exe\") and\n     not process.args : \"ADSelfService_Enroll.hta\"\
+      ]\n  [network where host.os.type == \"windows\" and process.name : \"mshta.exe\"\
+      ]\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.type
+- host.os.type
+- process.args
+- process.entity_id
+- process.name
+- process.parent.executable
+- process.parent.name

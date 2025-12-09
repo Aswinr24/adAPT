@@ -1,0 +1,26 @@
+title: DNS → Long DNS query (possible tunneling)
+id: aa896b9d-8efd-4070-a6f4-8432c2b72895
+status: stable
+description: Long subdomain / long first label
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags: []
+level: high
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+  - zeek-*
+detection:
+  selection:
+    keywords:
+    - 'event.dataset: "zeek.dns" and domain_length >= 60 and domain_entropy > 3
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

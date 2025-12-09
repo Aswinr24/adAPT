@@ -1,0 +1,57 @@
+title: Potential Meterpreter Reverse Shell
+id: 5c895b4f-9133-4e68-9e23-59902175355c
+status: stable
+description: This detection rule identifies a sample of suspicious Linux system file
+  reads used for system fingerprinting, leveraged by the Metasploit Meterpreter shell
+  to gather information about the target that it is executing its shell on. Detecting
+  this pattern is indicative of a successful meterpreter shell connection.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.elastic.co/security-labs/primer-on-persistence-mechanisms
+- https://www.elastic.co/security-labs/linux-detection-engineering-with-auditd
+tags:
+- attack.t1071
+- 'Tactic: Execution'
+- attack.command_and_control
+- attack.ta0002
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.ta0011
+- 'Data Source: Auditd Manager'
+- 'Domain: Endpoint'
+- attack.t1059
+- attack.execution
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - logs-auditd_manager.auditd-*
+detection:
+  selection:
+    eql_query: "sample by host.id, process.pid, user.id\n  [file where host.os.type\
+      \ == \"linux\" and auditd.data.syscall == \"open\" and auditd.data.a2 == \"\
+      1b6\" and file.path == \"/etc/machine-id\"]\n  [file where host.os.type == \"\
+      linux\" and auditd.data.syscall == \"open\" and auditd.data.a2 == \"1b6\" and\
+      \ file.path == \"/etc/passwd\"]\n  [file where host.os.type == \"linux\" and\
+      \ auditd.data.syscall == \"open\" and auditd.data.a2 == \"1b6\" and file.path\
+      \ == \"/proc/net/route\"]\n  [file where host.os.type == \"linux\" and auditd.data.syscall\
+      \ == \"open\" and auditd.data.a2 == \"1b6\" and file.path == \"/proc/net/ipv6_route\"\
+      ]\n  [file where host.os.type == \"linux\" and auditd.data.syscall == \"open\"\
+      \ and auditd.data.a2 == \"1b6\" and file.path == \"/proc/net/if_inet6\"]\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- auditd.data.a2
+- auditd.data.syscall
+- file.path
+- host.id
+- host.os.type
+- process.pid
+- user.id

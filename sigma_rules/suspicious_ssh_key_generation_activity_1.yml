@@ -1,0 +1,37 @@
+title: Suspicious SSH Key Generation Activity
+id: 7c58e3fc-c702-4d02-8b39-102407c7dc2d
+status: stable
+description: Detects creation of SSH keys which may indicate adversary preparing for
+  remote access (Acquire Access - T1650)
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0042
+- attack.t1650
+- MITRE
+- attack.resource_development
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'event.type: "start" AND
+
+      process.name: ("ssh-keygen" OR "ssh-keygen.exe") AND
+
+      NOT process.args: ("-l" OR "-L" OR "-F") AND
+
+      NOT user.name: ("ansible" OR "jenkins" OR "gitlab-runner")
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

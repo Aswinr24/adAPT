@@ -1,0 +1,38 @@
+title: LNK File Download via PowerShell
+id: 13f9276e-3bd4-4b7e-97e0-0d4229fae695
+status: stable
+description: 'Detects LNK file download and execution via PowerShell.
+
+  APT36 downloads malicious shortcut (.lnk) files from GitHub and executes them using
+  Start-Process.
+
+  LNK files can launch hidden processes, execute arbitrary commands, or retrieve additional
+  payloads.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.execution
+- APT36
+- attack.t1204
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\nprocess.command_line:\
+      \ (\n  (*Invoke-WebRequest* OR *iwr* OR *wget* OR *curl*) AND\n  (*OutFile*\
+      \ OR *-O*) AND\n  *.lnk*\n) AND\nprocess.command_line: (*Start-Process* OR *Invoke-Item*\
+      \ OR *ii*)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

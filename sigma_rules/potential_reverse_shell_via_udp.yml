@@ -1,0 +1,71 @@
+title: Potential Reverse Shell via UDP
+id: a5eb21b7-13cc-4b94-9fe2-29bb2914e037
+status: stable
+description: This detection rule identifies suspicious network traffic patterns associated
+  with UDP reverse shell activity. This activity consists of a sample of an execve,
+  socket and connect syscall executed by the same process, where the auditd.data.a0-1
+  indicate a UDP connection, ending with an egress connection event. An attacker may
+  establish a Linux UDP reverse shell to bypass traditional firewall restrictions
+  and gain remote access to a target system covertly.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+- https://www.elastic.co/security-labs/primer-on-persistence-mechanisms
+- https://www.elastic.co/security-labs/linux-detection-engineering-with-auditd
+tags:
+- attack.t1071
+- 'Tactic: Execution'
+- attack.command_and_control
+- attack.ta0002
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.ta0011
+- 'Data Source: Auditd Manager'
+- 'Domain: Endpoint'
+- attack.t1059
+- attack.execution
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - logs-auditd_manager.auditd-*
+detection:
+  selection:
+    eql_query: "sample by host.id, process.pid, process.parent.pid\n  [process where\
+      \ host.os.type == \"linux\" and event.type == \"start\" and event.action ==\
+      \ \"executed\" and process.name : (\n    \"bash\", \"dash\", \"sh\", \"tcsh\"\
+      , \"csh\", \"zsh\", \"ksh\", \"fish\", \"perl\", \"python*\", \"nc\", \"ncat\"\
+      , \"netcat\", \"php*\",\n    \"ruby\", \"openssl\", \"awk\", \"telnet\", \"\
+      lua*\", \"socat\"\n    )]\n  [process where host.os.type == \"linux\" and auditd.data.syscall\
+      \ == \"socket\" and process.name : (\n    \"bash\", \"dash\", \"sh\", \"tcsh\"\
+      , \"csh\", \"zsh\", \"ksh\", \"fish\", \"perl\", \"python*\", \"nc\", \"ncat\"\
+      , \"netcat\", \"php*\",\n    \"ruby\", \"openssl\", \"awk\", \"telnet\", \"\
+      lua*\", \"socat\"\n    ) and auditd.data.a1 == \"2\"]\n  [network where host.os.type\
+      \ == \"linux\" and event.type == \"start\" and event.action == \"connected-to\"\
+      \ and\n   process.name : (\n    \"bash\", \"dash\", \"sh\", \"tcsh\", \"csh\"\
+      , \"zsh\", \"ksh\", \"fish\", \"perl\", \"python*\", \"nc\", \"ncat\", \"netcat\"\
+      , \"php*\",\n    \"ruby\", \"openssl\", \"awk\", \"telnet\", \"lua*\", \"socat\"\
+      \n    ) and network.direction == \"egress\" and destination.ip != null and\n\
+      \   not cidrmatch(destination.ip, \"127.0.0.0/8\", \"169.254.0.0/16\", \"224.0.0.0/4\"\
+      , \"::1\")]\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- auditd.data.a1
+- auditd.data.syscall
+- destination.ip
+- event.action
+- event.type
+- host.id
+- host.os.type
+- network.direction
+- process.name
+- process.parent.pid
+- process.pid

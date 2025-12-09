@@ -1,0 +1,40 @@
+title: PowerShell Decrypting Encrypted Payload via SecureString
+id: e989ede5-7ae5-41ff-bbfe-d4e095b1b771
+status: stable
+description: Detects PowerShell activity where an encrypted or encoded payload is
+  decrypted using ConvertTo-SecureString -Key and SecureStringToBSTR, a technique
+  commonly used by malware to unpack hidden payloads. This behavior aligns with MITRE
+  ATT&CK technique T1027.013 – Encrypted/Encoded Files, often used to evade detection
+  by decrypting malicious content at runtime.
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.defense_evasion
+- Windows
+- attack.t1027
+- MITRE
+- attack.ta0005
+- APT36
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\n(\n  (\n    process.command_line:\
+      \ *ConvertTo-SecureString* AND\n    process.command_line: *-Key* AND\n    process.command_line:\
+      \ (*SecureStringToBSTR* OR *PtrToStringBSTR*)\n  )\n  OR\n  (\n    process.command_line:\
+      \ *Runtime.InteropServices.Marshal* AND\n    process.command_line: *SecureStringToBSTR*\
+      \ AND\n    process.command_line: (*Out-File* OR *Set-Content* OR *Add-Content*)\n\
+      \  )\n  OR\n  (\n    process.command_line: *ConvertTo-SecureString* AND\n  \
+      \  process.command_line: *[byte]* AND\n    process.command_line: (*PtrToStringBSTR*\
+      \ OR *PtrToStringUni* OR *PtrToStringAnsi*)\n  )\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

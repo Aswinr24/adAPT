@@ -1,0 +1,40 @@
+title: Excel4MacroSheets XLM Creation
+id: 70f85135-9364-4797-b9f0-dbfbc81687c7
+status: stable
+description: 'Detects Excel4MacroSheets creation and XLM macro execution via PowerShell
+  COM object.
+
+  APT36 creates Excel 4 Macros (XLM) programmatically using Excel.Application COM
+  object.
+
+  XLM macros bypass modern macro security controls and can download files, execute
+  commands, and persist.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.execution
+- APT36
+- attack.t1204
+level: high
+logsource:
+  category: unknown
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\" AND\nevent.code: \"4104\" AND\nevent.provider: \"\
+      Microsoft-Windows-PowerShell\" AND\n(\n  (message: *Excel4MacroSheets.Add* AND\
+      \ message: *Cells.Item*) OR\n  \n  (message: *Excel.Application* AND message:\
+      \ *FOPEN* AND message: *FWRITELN*) OR\n  \n  (message: *Excel4MacroSheets* AND\
+      \ message: *EXEC* AND message: *FCLOSE*)\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

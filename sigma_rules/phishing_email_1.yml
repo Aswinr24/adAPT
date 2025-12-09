@@ -1,0 +1,25 @@
+title: Phishing Email
+id: 99791706-d303-40bb-89da-17c10c720190
+status: stable
+description: Detect Phishing emails
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Email
+- Phishing
+level: high
+logsource:
+  category: unknown
+  product: linux
+detection:
+  selection:
+    keywords:
+    - 'event.original: "*ML_Label=phishing*"
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

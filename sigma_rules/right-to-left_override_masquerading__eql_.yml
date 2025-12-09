@@ -1,0 +1,35 @@
+title: Right-to-Left Override Masquerading (EQL)
+id: e54b6ed8-820f-4ca3-be4e-9c0e7f7d2d2f
+status: test
+description: "Detects Right-to-Left Override (RTLO) character abuse for filename masquerading\
+  \ using EQL.\nAPT29 uses RTLO (Unicode U+202E) to disguise malicious executables,\
+  \ making files appear to have \ninnocent extensions like .txt or .png while actually\
+  \ being executables. This EQL rule provides\nmore reliable detection of the actual\
+  \ RTLO Unicode character in process names, command lines,\nand file names."
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.t1036
+- attack.defense_evasion
+- Windows
+- MITRE
+- attack.ta0005
+- APT29
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    eql_query: "process where \n  process.name : (\"*cod*scr*\", \"*scr*cod*\", \"\
+      *txt.exe\", \"*doc.exe\", \"*pdf.exe\", \"*png.exe\", \"*jpg.exe\") or\n  process.command_line\
+      \ : (\"*cod*scr*\", \"*scr*cod*\") or\n  process.executable : (\"*cod*scr*\"\
+      , \"*scr*cod*\", \"*txt.exe\", \"*doc.exe\", \"*pdf.exe\", \"*png.exe\")"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

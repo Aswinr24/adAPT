@@ -1,0 +1,40 @@
+title: PowerShell UAC Bypass via Downloaded Payload
+id: e31b2ad0-3388-4223-b960-c99fb15fd3b6
+status: stable
+description: This rule detects PowerShell scripts attempting to bypass User Account
+  Control (UAC) using a downloaded payload and a custom UAC bypass module.
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0004
+- Windows
+- MITRE
+- attack.t1548
+- attack.privilege_escalation
+- Kill_chain
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'host.os.type:"windows" and
+
+      process.command_line: *Bypass-UAC* and
+
+      process.command_line: *WriteAllBytes* and
+
+      process.command_line: *DownloadData* and
+
+      process.command_line: *Users\\Public*
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

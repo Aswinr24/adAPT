@@ -1,0 +1,27 @@
+title: TI Match – Malicious IP
+id: 2b0fd167-2817-4dfe-8a71-b77db8272cdc
+status: stable
+description: Identify Malacious IPS
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- ThreatIntel
+level: high
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+  - winlogbeat-*
+  - pfsense-*
+  - zeek-*
+  - ubuntu-auditd*
+detection:
+  selection:
+    threat_match_query: '*:*'
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

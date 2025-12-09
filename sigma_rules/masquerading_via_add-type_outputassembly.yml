@@ -1,0 +1,41 @@
+title: Masquerading via Add-Type OutputAssembly
+id: 08c86b70-1746-43f8-a5c0-465a21864392
+status: stable
+description: 'Detects masquerading via Add-Type -OutputAssembly to create fake system
+  executables.
+
+  APT36 uses Add-Type to compile C# code and output to Windows\Temp with system executable
+  names (svchost.exe, etc).
+
+  This technique masks malware as legitimate system processes by placing imposters
+  in temp directories.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.t1036
+- attack.defense_evasion
+- Windows
+- MITRE
+- attack.ta0005
+- APT36
+level: high
+logsource:
+  category: unknown
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and event.code:4104 and\npowershell.file.script_block_text:*Add-Type*\
+      \ and\npowershell.file.script_block_text:*-OutputAssembly* and\npowershell.file.script_block_text:*Temp*\
+      \ and\n(\n  powershell.file.script_block_text:(\n    *svchost.exe* or *lsass.exe*\
+      \ or *services.exe* or *csrss.exe* or \n    *explorer.exe* or *rundll32.exe*\
+      \ or *regsvr32.exe* or *mshta.exe*\n  )\n) and\n(\n  powershell.file.script_block_text:(*public*\
+      \ or *class* or *Main* or *System.Console*)\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

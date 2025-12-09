@@ -1,0 +1,35 @@
+title: Digital Certificate Creation or Export
+id: a7e814cd-eb5f-43be-93ac-e1b9a52df29c
+status: stable
+description: Detects creation or export of digital certificates that may be used in
+  attacks (Develop Capabilities - T1587.003)
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0042
+- attack.t1587
+- MITRE
+- attack.resource_development
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - winlogbeat-*
+  - auditbeat-*
+detection:
+  selection:
+    keywords:
+    - "event.type: \"start\" AND\n(\n  (\n    host.os.type: \"windows\" AND\n    (\n\
+      \      process.name: (\"certutil.exe\" OR \"makecert.exe\" OR \"pvk2pfx.exe\"\
+      ) OR\n      process.command_line: (\n        \"*exportPFX*\" OR \"*-export*\"\
+      \ OR \"*-ss*\" OR \"*-pe*\"\n      )\n    )\n  )\n  OR\n  (\n    host.os.type:\
+      \ \"linux\" AND\n    process.name: (\"openssl\" OR \"keytool\") AND\n    process.args:\
+      \ (\n      \"req\" OR \"x509\" OR \"pkcs12\" OR \"-genkey\" OR \"-export\"\n\
+      \    )\n  )\n)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

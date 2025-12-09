@@ -1,0 +1,44 @@
+title: PowerShell Invocation of Encoded VBS Macro via Invoke-MalDoc
+id: dae0763d-a0cc-4354-9b27-562f2878fc3b
+status: stable
+description: 'Detects PowerShell execution of Visual Basic Script (VBS) macro payloads
+  delivered through malicious documents by abusing the Invoke-MalDoc framework.
+
+  This behavior is consistent with attackers executing embedded VBS code using PowerShell
+  loaders that fetch and run remote scripts (e.g., via Invoke-WebRequest / IWR), often
+  bypassing execution policies (Set-ExecutionPolicy Bypass).'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.t1059
+- attack.execution
+- APT36
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'host.os.type: "windows" and
+
+      process.command_line: (*Invoke-MalDoc* or *Invoke-Maldoc*) and
+
+      process.command_line: (*macroFile* or *Auto_Open*) and
+
+      process.command_line: (*IWR* or *Invoke-WebRequest*) and
+
+      process.command_line: (*Set-ExecutionPolicy* or *Bypass*)
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

@@ -1,0 +1,47 @@
+title: PowerShell Spawned from Command Prompt
+id: a5f8e52f-d0fe-41fd-952f-376ffc1a012a
+status: stable
+description: 'Detects PowerShell execution spawned from Command Prompt (cmd.exe).
+
+  APT29 uses cmd.exe to spawn PowerShell for command execution. This is a common technique
+
+  to evade detection or as part of a script chain. The rule focuses on cmd.exe spawning
+
+  powershell.exe which is suspicious in many environments.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.t1059
+- attack.execution
+- APT29
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'host.os.type:windows and event.category:process and
+
+      process.name : ("powershell.exe" or "powershell" or "pwsh.exe" or "pwsh") and
+
+      process.parent.name : "cmd.exe" and
+
+
+      not process.command_line : "*\\Windows\\System32\\*" and
+
+      not process.command_line : "*\\Microsoft Corporation*" and
+
+
+      not process.args : ("-File" or "-Command" or "Get-Help")'
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

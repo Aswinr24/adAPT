@@ -1,0 +1,40 @@
+title: RunMRU Registry Abuse for Execution
+id: bf004f86-7b73-443c-a750-dc223e3c3977
+status: stable
+description: 'Detects abuse of RunMRU registry key to launch mshta or other suspicious
+  executables.
+
+  APT36 writes to HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU
+  to bypass execution restrictions
+
+  and launch mshta.exe or cmd.exe with malicious payloads. This is then triggered
+  via user interaction or Run dialog.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.execution
+- APT36
+- attack.t1204
+level: high
+logsource:
+  category: unknown
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and event.code:4104 and\npowershell.file.script_block_text:*Set-ItemProperty*\
+      \ and\npowershell.file.script_block_text:*RunMRU* and\n(\n  powershell.file.script_block_text:*mshta.exe*\
+      \ or\n  \n  (powershell.file.script_block_text:*cmd.exe* and powershell.file.script_block_text:*/c*)\
+      \ or\n  \n  powershell.file.script_block_text:(*http* or *.hta* or *.bat* or\
+      \ *.cmd* or *.vbs*)\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

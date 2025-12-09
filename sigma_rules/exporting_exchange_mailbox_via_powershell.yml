@@ -1,0 +1,63 @@
+title: Exporting Exchange Mailbox via PowerShell
+id: 6aace640-e631-4870-ba8e-5fdda09325db
+status: stable
+description: Identifies the use of the Exchange PowerShell cmdlet, New-MailBoxExportRequest,
+  to export the contents of a primary mailbox or archive to a .pst file. Adversaries
+  may target user email to collect sensitive information.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.volexity.com/blog/2020/12/14/dark-halo-leverages-solarwinds-compromise-to-breach-organizations/
+- https://docs.microsoft.com/en-us/powershell/module/exchange/new-mailboxexportrequest?view=exchange-ps
+- https://www.elastic.co/security-labs/siestagraph-new-implant-uncovered-in-asean-member-foreign-ministry
+tags:
+- 'Tactic: Execution'
+- 'OS: Windows'
+- 'Data Source: SentinelOne'
+- attack.collection
+- attack.ta0009
+- 'Domain: Endpoint'
+- 'Tactic: Collection'
+- 'Use Case: Threat Detection'
+- 'Data Source: Microsoft Defender for Endpoint'
+- attack.t1005
+- 'Data Source: Windows Security Event Logs'
+- 'Data Source: Elastic Defend'
+- attack.t1059
+- attack.execution
+- 'Data Source: Crowdstrike'
+- attack.ta0002
+- 'Resources: Investigation Guide'
+- 'Data Source: Elastic Endgame'
+- 'Data Source: Sysmon'
+- attack.t1114
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - endgame-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process-*
+  - logs-m365_defender.event-*
+  - logs-sentinel_one_cloud_funnel.*
+  - logs-system.security*
+  - logs-windows.forwarded*
+  - logs-windows.sysmon_operational-*
+  - winlogbeat-*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"windows\" and event.type == \"start\"\
+      \ and\n  process.name: (\"powershell.exe\", \"pwsh.exe\", \"powershell_ise.exe\"\
+      ) and\n  process.command_line : (\"*MailboxExportRequest*\", \"*-Mailbox*-ContentFilter*\"\
+      )\n"
+  condition: selection
+falsepositives:
+- Legitimate exchange system administration activity.
+fields:
+- event.type
+- host.os.type
+- process.command_line
+- process.name

@@ -1,0 +1,47 @@
+title: Macro-Enabled Office Download via PowerShel
+id: b4331863-218a-44a7-8188-7aabb347bb02
+status: stable
+description: 'Detects Invoke-WebRequest download of macro-enabled Office files (.xlsm,
+  .docm).
+
+  APT36 downloads phishing attachments from GitHub and stores in $env:TEMP for later
+  macro execution.
+
+  These files contain malicious VBA/XLM macros that execute upon opening or macro
+  enablement.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- attack.ta0001
+- MITRE
+- attack.initial_access
+- attack.t1566
+- APT36
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'host.os.type: "windows" AND
+
+      event.code: "600" AND
+
+      winlog.channel: "Windows PowerShell" AND
+
+      process.command_line: *Invoke-WebRequest* AND
+
+      process.command_line: (*xlsm* OR *docm* OR *pptm* OR *xls* OR *doc* OR *ppt*)
+      AND
+
+      process.command_line: (*http* OR *https*)'
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

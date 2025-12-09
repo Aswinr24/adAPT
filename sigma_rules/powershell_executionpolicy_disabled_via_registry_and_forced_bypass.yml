@@ -1,0 +1,47 @@
+title: PowerShell ExecutionPolicy Disabled via Registry and Forced Bypass
+id: bff64425-2af6-4062-8930-451c5acdbf11
+status: stable
+description: 'This rule detects attempts to disable PowerShell’s Execution Policy
+  by modifying:
+
+
+  HKLM\Software\Policies\Microsoft\Windows\PowerShell\ExecutionPolicy
+
+
+
+  to ByPass, combined with the use of:
+
+
+  Set-ExecutionPolicy Bypass
+
+
+  Wscript.Shell with .SendKeys() to auto-confirm prompts'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.defense_evasion
+- Windows
+- MITRE
+- attack.t1562
+- attack.ta0005
+- Kill_chain
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:\"windows\" and\nprocess.command_line: *ExecutionPolicy* and\n\
+      (\n  process.command_line: \"*HKLM:\\\\Software\\\\Policies\\\\Microsoft\\\\\
+      Windows\\\\PowerShell*\" or\n  process.command_line: *Set-ExecutionPolicy*\n\
+      ) and\n(\n  process.command_line: *Wscript.Shell* or\n  process.command_line:\
+      \ *sendkeys*\n)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

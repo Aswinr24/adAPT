@@ -1,0 +1,28 @@
+title: DNS → Outbound DNS to non-internal resolvers
+id: f6f9122d-da82-487d-af51-cbf1982952b9
+status: stable
+description: Detect endpoints bypassing enterprise DNS resolvers. Possible malware/tunneling.
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.command_and_control
+- attack.ta0011
+- tunneling
+level: high
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+  - zeek-*
+detection:
+  selection:
+    keywords:
+    - "event.dataset: \"zeek.dns\" and network.transport: \"udp\" \nand destination.port:\
+      \ 53 \nand not destination.ip: (10.10.10.1 or 10.10.10.5)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

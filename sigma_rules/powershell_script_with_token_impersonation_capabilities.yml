@@ -1,0 +1,64 @@
+title: PowerShell Script with Token Impersonation Capabilities
+id: 11dd9713-0ec6-4110-9707-32daae1ee68c
+status: stable
+description: Detects scripts that contain PowerShell functions, structures, or Windows
+  API functions related to token impersonation/theft. Attackers may duplicate then
+  impersonate another user's token to escalate privileges and bypass access controls.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://github.com/decoder-it/psgetsystem
+- https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/Get-System.ps1
+- https://github.com/EmpireProject/Empire/blob/master/data/module_source/privesc/Invoke-MS16032.ps1
+- https://github.com/atc-project/atc-data/blob/master/docs/Logging_Policies/LP_0109_windows_powershell_script_block_log.md
+tags:
+- attack.t1134
+- attack.t1106
+- 'Tactic: Privilege Escalation'
+- attack.ta0004
+- 'OS: Windows'
+- attack.ta0002
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.privilege_escalation
+- 'Domain: Endpoint'
+- attack.t1059
+- attack.execution
+- 'Data Source: PowerShell Logs'
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+  - logs-windows.powershell*
+detection:
+  selection:
+    keywords:
+    - "event.category:process and host.os.type:windows and\n  powershell.file.script_block_text:(\n\
+      \    \"Invoke-TokenManipulation\" or\n    \"ImpersonateNamedPipeClient\" or\n\
+      \    \"NtImpersonateThread\" or\n    (\n      \"STARTUPINFOEX\" and\n      \"\
+      UpdateProcThreadAttribute\"\n    ) or\n    (\n      \"AdjustTokenPrivileges\"\
+      \ and\n      \"SeDebugPrivilege\"\n    ) or\n    (\n      (\"DuplicateToken\"\
+      \ or\n      \"DuplicateTokenEx\") and\n      (\"SetThreadToken\" or\n      \"\
+      ImpersonateLoggedOnUser\" or\n      \"CreateProcessWithTokenW\" or\n      \"\
+      CreatePRocessAsUserW\" or\n      \"CreateProcessAsUserA\")\n    ) \n  ) and\n\
+      \  not (\n    user.id:(\"S-1-5-18\" or \"S-1-5-19\" or \"S-1-5-20\") and\n \
+      \   file.directory: \"C:\\\\ProgramData\\\\Microsoft\\\\Windows Defender Advanced\
+      \ Threat Protection\\\\Downloads\"\n  ) and\n  not powershell.file.script_block_text\
+      \ : (\n    \"sentinelbreakpoints\" and \"Set-PSBreakpoint\" and \"PowerSploitIndicators\"\
+      \n  ) and\n  not (\n    powershell.file.script_block_text : \"New-HPPrivateToastNotificationLogo\"\
+      \ and\n    file.path : \"C:\\Program Files\\HPConnect\\hp-cmsl-wl\\modules\\\
+      HP.Notifications\\HP.Notifications.psm1\"\n  )\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.category
+- file.directory
+- file.path
+- host.os.type
+- powershell.file.script_block_text
+- user.id

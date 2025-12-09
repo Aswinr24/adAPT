@@ -1,0 +1,43 @@
+title: RunMRU Registry Modification for Mshta
+id: c1392880-df8a-43af-b46e-3f6717c65b16
+status: stable
+description: 'Detects SetItemProperty for RunMRU registry modification with mshta
+  executable.
+
+  APT36 writes to HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\RunMRU
+  to store mshta.exe commands.
+
+  When user opens Run dialog (Win+R), the MRU history is populated with malicious
+  commands for quick execution.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.execution
+- APT36
+- attack.t1204
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\" AND\nevent.code: \"600\" AND\n(\n  process.command_line:\
+      \ (*Set-ItemProperty* OR *New-ItemProperty* OR *Set-Item*) AND\n  (    (process.command_line:\
+      \ *RunMRU* AND \n     process.command_line: (*mshta* OR *http* OR *.hta*)) OR\n\
+      \    \n    (process.command_line: (*\\\\Run* OR *\\\\RunOnce*) AND\n     process.command_line:\
+      \ (*mshta* OR *rundll32* OR *regsvr32*)) OR\n    \n    (process.command_line:\
+      \ *\\\\Startup\\\\* AND\n     process.command_line: (*.hta* OR *.vbs* OR *.js*))\
+      \ OR\n    \n    (process.command_line: *Userinit* AND\n     process.command_line:\
+      \ *mshta*)\n  )\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

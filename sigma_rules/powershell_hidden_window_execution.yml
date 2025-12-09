@@ -1,0 +1,40 @@
+title: PowerShell Hidden Window Execution
+id: 9d409bf6-7480-4cb2-991e-72f9b5f3967f
+status: stable
+description: 'Detects PowerShell execution with hidden window style (-WindowStyle
+  Hidden or -window hidden).
+
+  APT29 uses hidden PowerShell windows to execute malicious commands without user
+  visibility.
+
+  This technique is used in their RTLO execution, UAC bypass payloads, and steganography
+  decoder.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.t1059
+- attack.execution
+- APT29
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and\n(\n  (event.category : process and process.name :\
+      \ \"powershell.exe\" and \n   process.command_line : (*-window*hidden* or *-WindowStyle*Hidden*\
+      \ or *-w*hidden*)) or\n  (event.code : \"4104\" and powershell.file.script_block_text\
+      \ : *start-process* and \n   powershell.file.script_block_text : *-WindowStyle*Hidden*)\n\
+      )"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

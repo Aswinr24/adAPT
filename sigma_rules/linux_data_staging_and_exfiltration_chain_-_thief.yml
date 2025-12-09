@@ -1,0 +1,41 @@
+title: Linux Data Staging and Exfiltration Chain - Thief
+id: 25b46163-1860-4434-b27a-315124e4e7f4
+status: stable
+description: Detects a complete threat chain sequence involving local data staging,
+  sensitive file discovery, compression, and exfiltration. This rule correlates alerts
+  from five distinct detection rules to identify high-confidence APT-like activity
+  where an attacker stages data in a temporary directory before exfiltrating it.
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Linux
+- Thief
+level: high
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - .internal.alerts-security.alerts-default-*
+detection:
+  selection:
+    eql_query: "sequence by host.id with maxspan=1h\n  [any where kibana.alert.rule.name\
+      \ in (\n       \"T1074.001 - Suspicious Staging Directory Creation\",\n    \
+      \   \"T1005 – Data from Local System\",\n       \"T1560.001 - Staged Data Compressed\
+      \ in Linux\",\n       \"Auditbeat Process-Based Exfiltration (T1041)\"\n  )]\n\
+      \  [any where kibana.alert.rule.name in (\n       \"T1074.001 - Suspicious Staging\
+      \ Directory Creation\",\n       \"T1005 – Data from Local System\",\n      \
+      \ \"T1560.001 - Staged Data Compressed in Linux\",\n       \"Auditbeat Process-Based\
+      \ Exfiltration (T1041)\"\n  )]\n  [any where kibana.alert.rule.name in (\n \
+      \      \"T1074.001 - Suspicious Staging Directory Creation\",\n       \"T1005\
+      \ – Data from Local System\",\n       \"T1560.001 - Staged Data Compressed in\
+      \ Linux\",\n       \"Auditbeat Process-Based Exfiltration (T1041)\"\n  )]\n\
+      \  [any where kibana.alert.rule.name in (\n       \"T1074.001 - Suspicious Staging\
+      \ Directory Creation\",\n       \"T1005 – Data from Local System\",\n      \
+      \ \"T1560.001 - Staged Data Compressed in Linux\",\n       \"Auditbeat Process-Based\
+      \ Exfiltration (T1041)\"\n  )]\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

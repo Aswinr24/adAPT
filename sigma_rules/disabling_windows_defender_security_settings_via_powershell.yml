@@ -1,0 +1,64 @@
+title: Disabling Windows Defender Security Settings via PowerShell
+id: c8cccb06-faf2-4cd5-886e-2c9636cfcb87
+status: stable
+description: Identifies use of the Set-MpPreference PowerShell command to disable
+  or weaken certain Windows Defender settings.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://docs.microsoft.com/en-us/powershell/module/defender/set-mppreference?view=windowsserver2019-ps
+- https://www.elastic.co/security-labs/operation-bleeding-bear
+- https://www.elastic.co/security-labs/invisible-miners-unveiling-ghostengine
+tags:
+- 'Tactic: Execution'
+- 'OS: Windows'
+- 'Data Source: SentinelOne'
+- attack.t1562
+- 'Domain: Endpoint'
+- 'Tactic: Defense Evasion'
+- attack.defense_evasion
+- 'Use Case: Threat Detection'
+- 'Data Source: Microsoft Defender for Endpoint'
+- attack.ta0005
+- 'Data Source: Windows Security Event Logs'
+- 'Data Source: Elastic Defend'
+- attack.t1059
+- attack.execution
+- 'Data Source: Crowdstrike'
+- attack.ta0002
+- 'Resources: Investigation Guide'
+- 'Data Source: Elastic Endgame'
+- 'Data Source: Sysmon'
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - endgame-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process-*
+  - logs-m365_defender.event-*
+  - logs-sentinel_one_cloud_funnel.*
+  - logs-system.security*
+  - logs-windows.forwarded*
+  - logs-windows.sysmon_operational-*
+  - winlogbeat-*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"windows\" and event.type == \"start\"\
+      \ and\n  (\n    process.name : (\"powershell.exe\", \"pwsh.exe\", \"powershell_ise.exe\"\
+      ) or\n    ?process.pe.original_file_name in (\"PowerShell.EXE\", \"pwsh.dll\"\
+      , \"powershell_ise.EXE\")\n  ) and\n  process.args : \"Set-MpPreference\" and\
+      \ process.args : (\"-Disable*\", \"Disabled\", \"NeverSend\", \"-Exclusion*\"\
+      )\n"
+  condition: selection
+falsepositives:
+- Planned Windows Defender configuration changes.
+fields:
+- event.type
+- host.os.type
+- process.args
+- process.name
+- process.pe.original_file_name

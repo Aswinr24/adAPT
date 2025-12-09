@@ -1,0 +1,36 @@
+title: PowerShell Compiled Binary Masquerading as System Executable
+id: 1fc79542-e257-4943-b7a0-3dd06b599a55
+status: stable
+description: Detects PowerShell generating and executing a binary compiled at runtime
+  using Add-Type -OutputAssembly, often masquerading as a legitimate Windows system
+  executable such as svchost.exe. Adversaries use this technique to bypass application
+  controls, evade detection, and run arbitrary payloads under trusted-looking filenames.
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.t1036
+- attack.defense_evasion
+- Windows
+- MITRE
+- attack.ta0005
+- APT36
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type: \"windows\"\nand (\n  (\n    event.code: \"4104\"\n    and powershell.file.script_block_text\
+      \ : (\n        \"*Add-Type*\" and \"*-OutputAssembly*\" and \"*.exe*\"\n   \
+      \ )\n  )\n  or\n  (\n    event.type: \"start\"\n    and process.parent.name:\
+      \ \"powershell.exe\"\n    and process.name : \"*.exe\"\n    and process.executable\
+      \ : \"?:\\\\Windows\\\\Temp\\\\*\"\n  )\n)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

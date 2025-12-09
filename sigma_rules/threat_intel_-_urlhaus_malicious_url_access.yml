@@ -1,0 +1,25 @@
+title: Threat Intel - URLhaus Malicious URL Access
+id: 3cf1f78c-9dca-40ad-8e7c-a3ad62e6ae0e
+status: stable
+description: Detects access to malicious URLs and domains from URLhaus abuse.ch feed
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- ThreatIntel
+level: high
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+  - zeek-*
+  - pfsense-*
+detection:
+  selection:
+    threat_match_query: '*:*'
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

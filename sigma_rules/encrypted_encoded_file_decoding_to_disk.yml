@@ -1,0 +1,42 @@
+title: Encrypted/Encoded File Decoding to Disk
+id: ed3cdacf-85c9-46c2-94db-4a3b92aa7c27
+status: stable
+description: 'Detects decoding of base64/encrypted data to file output in PowerShell.
+
+  APT36 uses FromBase64String and ConvertTo-SecureString to decode/decrypt embedded
+  payloads, then writes to file with Out-File.
+
+  This combines encoding bypass with file persistence for malware staging.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.defense_evasion
+- Windows
+- attack.t1027
+- MITRE
+- attack.ta0005
+- APT36
+level: high
+logsource:
+  category: unknown
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and event.code:4104 and\n(\n  (powershell.file.script_block_text:*FromBase64String*\
+      \ and\n   (powershell.file.script_block_text:*Out-File* or powershell.file.script_block_text:*Set-Content*\
+      \ or powershell.file.script_block_text:*Add-Content*)) or\n  \n  (powershell.file.script_block_text:*ConvertTo-SecureString*\
+      \ and\n   powershell.file.script_block_text:*-Key* and\n   (powershell.file.script_block_text:*Out-File*\
+      \ or powershell.file.script_block_text:*Set-Content*)) or\n  \n  (powershell.file.script_block_text:*System.Security.Cryptography.AesManaged*\
+      \ and\n   (powershell.file.script_block_text:*Out-File* or powershell.file.script_block_text:*Set-Content*))\
+      \ or\n  \n  (powershell.file.script_block_text:*[System.Convert]* and\n   powershell.file.script_block_text:*GetBytes*\
+      \ and\n   (powershell.file.script_block_text:*Out-File* or powershell.file.script_block_text:*WriteAllBytes*))\n\
+      )"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

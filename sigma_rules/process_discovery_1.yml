@@ -1,0 +1,38 @@
+title: Process Discovery
+id: 74b39694-ef12-470c-8e15-13dbfb0f15b3
+status: stable
+description: 'Detects process discovery commands. APT29 uses ''tasklist /v'' for verbose
+  process listing
+
+  and custom PowerShell functions like ''ProcessList'' to enumerate running processes.
+
+  This helps attackers identify security software, interesting targets, and running
+  applications.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.discovery
+- Windows
+- attack.ta0007
+- MITRE
+- attack.t1057
+- APT29
+level: low
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and\n(\n  (event.category : process and process.name :\
+      \ \"tasklist.exe\" and \n   process.command_line : (*/v* or */s* or */m*)) or\n\
+      \  (event.code : \"4104\" and \n   powershell.file.script_block_text : (*ProcessList*\
+      \ or *Get-Process* or *ps.ps1*))\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

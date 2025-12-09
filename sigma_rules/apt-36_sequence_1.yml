@@ -1,0 +1,47 @@
+title: APT-36 Sequence
+id: 652a7489-984b-4a71-99c6-dc2cd2e6591f
+status: stable
+description: Sequence of APT36
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- APT36
+- MITRE
+level: critical
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - .internal.alerts-security.alerts-default-*
+  - .internal.alerts-*
+detection:
+  selection:
+    eql_query: "sequence by host.id with maxspan=30m\n  \n  [ any where kibana.alert.rule.name\
+      \ in (\n      \"Macro-Enabled Office Download via PowerShel\",\n      \"Word\
+      \ Spawning Command Shell With External IP in Command Line\"\n    )\n  ]\n\n\
+      \  [ any where kibana.alert.rule.name in (\n      \"Keybd_Event Win+R Keyboard\
+      \ Simulation\",\n      \"Creation of Hidden System File via PowerShell\"\n \
+      \   )\n  ]\n\n  [ any where (\n      kibana.alert.rule.name in (\n        \"\
+      Masquerading via Add-Type OutputAssembly\",\n        \"PowerShell Invocation\
+      \ of Encoded VBS Macro via Invoke-MalDoc\"\n      )\n      or true\n    )\n\
+      \  ]\n\n  [ any where (\n      kibana.alert.rule.name in (\n        \"PowerShell\
+      \ Execution of Visual Basic Script via cscript\",\n        \"Creation of Hidden\
+      \ System File via PowerShell\"\n      )\n      or true\n    )\n  ]\n\n  [ any\
+      \ where (\n      kibana.alert.rule.name in (\n        \"PowerShell Encoded Payload\
+      \ Execution (Base64 → IEX / File Write)\",\n        \"PowerShell Decrypting\
+      \ Encrypted Payload via SecureString\"\n      )\n      or true\n    )\n  ]\n\
+      \n  [ any where (\n      kibana.alert.rule.name in (\n        \"RunMRU Registry\
+      \ Modification for Mshta\",\n        \"Excel4MacroSheets XLM Creation\"\n  \
+      \    )\n      or true\n    )\n  ]\n\n  [ any where (\n      kibana.alert.rule.name\
+      \ in (\n        \"LNK File Download via PowerShell\",\n        \"Invoke-MalDoc\
+      \ VBS Macro Execution\"\n      )\n      or true\n    )\n  ]\n\n  [ any where\
+      \ (\n      kibana.alert.rule.name in (\n        \"Word Spawning Command Shell\
+      \ With External IP in Command Line\",\n        \"PowerShell Execution of Batch\
+      \ Script via Start-Process\"\n      )\n      or true\n    )\n  ]\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

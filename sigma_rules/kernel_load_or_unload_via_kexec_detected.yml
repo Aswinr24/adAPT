@@ -1,0 +1,68 @@
+title: Kernel Load or Unload via Kexec Detected
+id: 4d4c35f4-414e-4d0c-bb7e-6db7c80a6957
+status: stable
+description: This detection rule identifies the usage of kexec, helping to uncover
+  unauthorized kernel replacements and potential compromise of the system's integrity.
+  Kexec is a Linux feature that enables the loading and execution of a different kernel
+  without going through the typical boot process. Malicious actors can abuse kexec
+  to bypass security measures, escalate privileges, establish persistence or hide
+  their activities by loading a malicious kernel, enabling them to tamper with the
+  system's trusted state, allowing e.g. a VM Escape.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.crowdstrike.com/blog/venom-vulnerability-details/
+- https://www.makeuseof.com/what-is-venom-vulnerability/
+- https://madaidans-insecurities.github.io/guides/linux-hardening.html
+tags:
+- 'Data Source: SentinelOne'
+- 'Data Source: Auditd Manager'
+- 'Domain: Endpoint'
+- attack.t1601
+- 'Tactic: Defense Evasion'
+- attack.ta0004
+- attack.defense_evasion
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- attack.ta0005
+- 'Tactic: Persistence'
+- attack.privilege_escalation
+- 'Data Source: Elastic Defend'
+- attack.t1547
+- attack.ta0003
+- 'Tactic: Privilege Escalation'
+- 'Data Source: Crowdstrike'
+- 'Resources: Investigation Guide'
+- attack.t1611
+- 'Data Source: Elastic Endgame'
+- attack.persistence
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - endgame-*
+  - logs-auditd_manager.auditd-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process*
+  - logs-sentinel_one_cloud_funnel.*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"linux\" and event.type == \"start\"\
+      \ and\n  event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\"\
+      , \"executed\", \"process_started\") and\n  process.name == \"kexec\" and process.args\
+      \ in (\"--exec\", \"-e\", \"--load\", \"-l\", \"--unload\", \"-u\") and\n  not\
+      \ process.parent.name in (\"kdumpctl\", \"unload.sh\")\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- event.type
+- host.os.type
+- process.args
+- process.name
+- process.parent.name

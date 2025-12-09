@@ -1,0 +1,43 @@
+title: Modification of Dynamic Linker Preload Shared Object
+id: 717f82c2-7741-4f9b-85b8-d06aeb853f4f
+status: stable
+description: Identifies modification of the dynamic linker preload shared object (ld.so.preload).
+  Adversaries may execute malicious payloads by hijacking the dynamic linker used
+  to load libraries.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.anomali.com/blog/rocke-evolves-its-arsenal-with-a-new-malware-family-written-in-golang
+tags:
+- attack.t1574
+- 'Tactic: Privilege Escalation'
+- attack.ta0004
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.privilege_escalation
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Endgame'
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - logs-endpoint.events.*
+  - endgame-*
+detection:
+  selection: {}
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- event.category
+- event.type
+- file.path
+- host.os.type
+- process.name

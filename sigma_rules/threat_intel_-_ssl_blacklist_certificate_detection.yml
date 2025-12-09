@@ -1,0 +1,27 @@
+title: Threat Intel - SSL Blacklist Certificate Detection
+id: 51bbf88c-6bd8-4b4c-ba85-0fd86b929f31
+status: stable
+description: Detects SSL/TLS connections using blacklisted certificates from abuse.ch
+  SSL Blacklist
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- ThreatIntel
+level: high
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+  - zeek-*
+  - pfsense-*
+  - winlogbeat-*
+detection:
+  selection:
+    threat_match_query: '*:*'
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

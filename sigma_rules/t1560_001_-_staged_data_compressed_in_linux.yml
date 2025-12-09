@@ -1,0 +1,42 @@
+title: T1560.001 - Staged Data Compressed in Linux
+id: 10b023a5-83b9-4c2e-9972-4fb08d0e10b6
+status: stable
+description: Detects utilities used to compress, encrypt, or split data located in
+  temporary directories.
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Linux
+- MITRE
+- T1560.001
+- attack.collection
+- Auditbeat
+- attack.t1560
+- attack.ta0009
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+detection:
+  selection:
+    keywords:
+    - "agent.type: \"auditbeat\" AND \nevent.category: \"process\" AND \nevent.action:\
+      \ \"executed\" AND\n\nprocess.name: (\n  \"tar\" OR \"zip\" OR \"gzip\" OR \"\
+      bzip2\" OR \"xz\" OR \"7z\" OR\n  \"7za\" OR \"rar\" OR \"gpg\" OR \"openssl\"\
+      \ OR \"split\"\n) AND\n\nprocess.args: (\n  \"*.tar\" OR \"*.tgz\" OR \"*.tar.gz\"\
+      \ OR \"*.gz\" OR \"*.zip\" OR \"*.7z\" OR \"*.rar\" OR \"*.enc\"\n) AND (\n\n\
+      \  process.args: (\n    \"/etc/*\" OR \"/root/*\" OR \"/home/*/.ssh/*\" OR \"\
+      /var/www/*\" OR \"/var/lib/*\"\n  )\n\n  OR process.args: (\n    \"/tmp/*\"\
+      \ OR \"/var/tmp/*\" OR \"/dev/shm/*\" OR \"/run/shm/*\"\n  )\n  OR (process.name:\
+      \ \"tar\" AND process.args: \"-P\")\n\n  OR process.args: (\n    \"*staged*\"\
+      \ OR \"*staging*\" OR \"*exfil*\" OR \"*password*\" OR \"*shadow*\"\n  )\n \n\
+      \  OR process.args: (\n    \"*/.*.tar\" OR \"*/.*.zip\" OR \"*/.*.gz\" OR \"\
+      */.*.tgz\" OR \"*/.*.7z\"\n  )\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

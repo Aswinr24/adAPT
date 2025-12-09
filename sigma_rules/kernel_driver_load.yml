@@ -1,0 +1,50 @@
+title: Kernel Driver Load
+id: 3e12a439-d002-4944-bc42-171c0dcb9b96
+status: stable
+description: Detects the loading of a Linux kernel module through system calls. Threat
+  actors may leverage Linux kernel modules to load a rootkit on a system providing
+  them with complete control and the ability to hide from security products. As other
+  rules monitor for the addition of Linux kernel modules through system utilities
+  or .ko files, this rule covers the gap that evasive rootkits leverage by monitoring
+  for kernel module additions on the lowest level through auditd_manager.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references: []
+tags:
+- 'Tactic: Persistence'
+- attack.ta0003
+- 'Tactic: Defense Evasion'
+- attack.defense_evasion
+- attack.t1014
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Data Source: Auditd Manager'
+- attack.ta0005
+- 'Domain: Endpoint'
+- attack.persistence
+- attack.t1547
+level: low
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+  - logs-auditd_manager.auditd-*
+detection:
+  selection:
+    eql_query: 'driver where host.os.type == "linux" and event.action == "loaded-kernel-module"
+      and
+
+      auditd.data.syscall in ("init_module", "finit_module")
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- auditd.data.syscall
+- event.action
+- host.os.type

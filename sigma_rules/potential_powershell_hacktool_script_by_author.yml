@@ -1,0 +1,55 @@
+title: Potential PowerShell HackTool Script by Author
+id: 2553a9af-52a4-4a05-bb03-85b2a479a0a0
+status: stable
+description: Detects known PowerShell offensive tooling author's name in PowerShell
+  scripts. Attackers commonly use out-of-the-box offensive tools without modifying
+  the code, which may still contain the author artifacts. This rule identifies common
+  author handles found in popular PowerShell scripts used for red team exercises.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://github.com/atc-project/atc-data/blob/master/docs/Logging_Policies/LP_0109_windows_powershell_script_block_log.md
+tags:
+- 'Tactic: Execution'
+- 'OS: Windows'
+- attack.ta0002
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Domain: Endpoint'
+- attack.t1059
+- attack.execution
+- 'Data Source: PowerShell Logs'
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+  - logs-windows.powershell*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and event.category:process and\n  powershell.file.script_block_text\
+      \ : (\n      \"mattifestation\" or \"JosephBialek\" or\n      \"harmj0y\" or\
+      \ \"ukstufus\" or\n      \"SecureThisShit\" or \"Matthew Graeber\" or\n    \
+      \  \"secabstraction\" or \"mgeeky\" or\n      \"oddvarmoe\" or \"am0nsec\" or\n\
+      \      \"obscuresec\" or \"sixdub\" or\n      \"darkoperator\" or \"funoverip\"\
+      \ or\n      \"rvrsh3ll\" or \"kevin_robertson\" or\n      \"dafthack\" or \"\
+      r4wd3r\" or\n      \"danielhbohannon\" or \"OneLogicalMyth\" or\n      \"cobbr_io\"\
+      \ or \"xorrior\" or\n      \"PetrMedonos\" or \"citronneur\" or\n      \"eladshamir\"\
+      \ or \"RastaMouse\" or\n      \"enigma0x3\" or \"FuzzySec\" or\n      \"424f424f\"\
+      \ or \"jaredhaight\" or\n      \"fullmetalcache\" or \"Hubbl3\" or\n      \"\
+      curi0usJack\" or \"Cx01N\" or\n      \"itm4n\" or \"nurfed1\" or\n      \"cfalta\"\
+      \ or \"Scott Sutherland\" or\n      \"_nullbind\" or \"_tmenochet\" or\n   \
+      \   \"jaredcatkinson\" or \"ChrisTruncer\" or\n      \"monoxgas\" or \"TheRealWover\"\
+      \ or\n      \"splinter_code\"\n  ) and\n  not powershell.file.script_block_text\
+      \ : (\"Get-UEFIDatabaseSigner\" or \"Posh-SSH\")\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.category
+- host.os.type
+- powershell.file.script_block_text

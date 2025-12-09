@@ -1,0 +1,43 @@
+title: Linux User Account Creation
+id: edfd5ca9-9d6c-44d9-b615-1e56b920219c
+status: stable
+description: Identifies attempts to create new users. Attackers may add new users
+  to establish persistence on a system.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.elastic.co/security-labs/primer-on-persistence-mechanisms
+tags:
+- 'Tactic: Persistence'
+- attack.ta0003
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Domain: Endpoint'
+- attack.t1136
+- attack.persistence
+level: low
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - filebeat-*
+  - logs-system.auth-*
+detection:
+  selection:
+    eql_query: 'iam where host.os.type == "linux" and (event.type == "user" and event.type
+      == "creation") and
+
+      process.name in ("useradd", "adduser") and user.name != null
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.type
+- host.os.type
+- process.name
+- user.name

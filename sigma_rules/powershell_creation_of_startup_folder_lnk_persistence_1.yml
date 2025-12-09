@@ -1,0 +1,39 @@
+title: PowerShell Creation of Startup Folder LNK Persistence
+id: 478fae8a-7408-4af4-9fa0-c6db359fb138
+status: stable
+description: This rule detects the creation of a malicious persistence mechanism in
+  which an attacker uses PowerShell to generate a .lnk shortcut file inside the user's
+  Startup folder.
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0003
+- Windows
+- MITRE
+- Kill_chain
+- attack.persistence
+- attack.t1547
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'host.os.type:"windows" and
+
+      process.command_line: *WScript.Shell* and
+
+      process.command_line: *CreateShortcut* and
+
+      process.command_line: *Startup*
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

@@ -1,0 +1,51 @@
+title: Privileged Account Brute Force
+id: f9790abf-bd0c-45f9-8b5f-d0b74015e029
+status: stable
+description: Identifies multiple consecutive logon failures targeting an Admin account
+  from the same source address and within a short time interval. Adversaries will
+  often brute force login attempts across multiple users with a common or known password,
+  in an attempt to gain access to accounts.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://docs.microsoft.com/en-us/windows/security/threat-protection/auditing/event-4625
+tags:
+- 'Data Source: Windows Security Event Logs'
+- attack.ta0006
+- 'Tactic: Credential Access'
+- attack.t1110
+- attack.credential_access
+- 'OS: Windows'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Domain: Endpoint'
+level: medium
+logsource:
+  category: unknown
+  product: windows
+  index:
+  - logs-system.security*
+  - logs-windows.forwarded*
+  - winlogbeat-*
+detection:
+  selection:
+    eql_query: "sequence by winlog.computer_name, source.ip with maxspan=10s\n  [authentication\
+      \ where host.os.type == \"windows\" and\n    event.action == \"logon-failed\"\
+      \ and winlog.logon.type : \"Network\" and\n    source.ip != null and source.ip\
+      \ != \"127.0.0.1\" and source.ip != \"::1\" and user.name : \"*admin*\" and\n\
+      \n    /* noisy failure status codes often associated to authentication misconfiguration\
+      \ */\n    not winlog.event_data.Status : (\"0xC000015B\", \"0XC000005E\", \"\
+      0XC0000133\", \"0XC0000192\")] with runs=5\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- host.os.type
+- source.ip
+- user.name
+- winlog.computer_name
+- winlog.event_data.Status
+- winlog.logon.type

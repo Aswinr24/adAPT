@@ -1,0 +1,47 @@
+title: Potential Execution via FileFix Phishing Attack
+id: 4477c9f4-0f6c-4c3d-bd3e-bdb9550c6cc6
+status: stable
+description: 'Identifies the execution of Windows commands or downloaded files via
+  the browser''s dialog box. Adversaries may use phishing
+
+  to instruct the victim to copy and paste malicious commands for execution via crafted
+  phsihing web pages.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- attack.ta0001
+- MITRE
+- attack.initial_access
+- attack.t1566
+- APT36
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"windows\" and event.type == \"start\"\
+      \ and\n(\n  (\n    process.parent.args == \"--message-loop-type-ui\" and \n\
+      \    process.parent.args == \"--service-sandbox-type=none\" and\n    (\n   \
+      \   process.name : (\"pwsh.exe\", \"powershell.exe\", \"curl.exe\", \"msiexec.exe\"\
+      , \n                      \"mshta.exe\", \"wscript.exe\", \"cscript.exe\", \"\
+      rundll32.exe\", \n                      \"certutil.exe\", \"certreq.exe\", \"\
+      cmd.exe\") or\n      process.executable : \"?:\\\\Users\\\\*\\\\Downloads\\\\\
+      *\"\n    ) and\n    not (process.name : \"rundll32.exe\" and \n         process.args\
+      \ : (\"ndfapi.dll,NdfRunDllDiagnoseWithAnswerFile\", \n                    \
+      \     \"shwebsvc.dll,AddNetPlaceRunDll\"))\n  )\n  or\n  (\n    process.parent.name\
+      \ : \"explorer.exe\" and\n    process.name : (\"cmd.exe\", \"powershell.exe\"\
+      , \"pwsh.exe\") and\n    (\n      process.command_line : (\"*-ec *\", \"*-encodedcommand\
+      \ *\", \"*-e *\") or\n      process.command_line : (\"*cmd /c powershell*\"\
+      , \"*cmd.exe /c powershell*\") or\n      process.command_line : (\"*IEX*\",\
+      \ \"*Invoke-Expression*\", \"*downloadstring*\", \n                        \
+      \      \"*wget *\", \"*curl *\", \"*Net.WebClient*\")\n    )\n  )\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

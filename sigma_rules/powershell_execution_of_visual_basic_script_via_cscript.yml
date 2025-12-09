@@ -1,0 +1,43 @@
+title: PowerShell Execution of Visual Basic Script via cscript
+id: 4f10b81d-707f-4cb5-9f80-a1275b4e4c8c
+status: stable
+description: 'Detects PowerShell launching a Visual Basic Script (.vbs) via cscript.exe
+  using PowerShell’s HostApplication command line.
+
+  This behavior is commonly associated with execution techniques used by adversaries
+  to gather system information, evade detection, or run malicious scripts delivered
+  through phishing, loaders, or initial access tooling.
+
+  The detection specifically monitors PowerShell Operational Event ID 600, where the
+  full PowerShell host command line reveals the use of cscript and a .vbs script.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-09'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.t1059
+- attack.execution
+- APT36
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'host.os.type: "windows" AND
+
+      event.code: "600" AND
+
+      (process.command_line: *cscript* OR process.command_line.text: *cscript*) AND
+
+      (process.command_line: *.vbs* OR process.command_line.text: *.vbs*)'
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

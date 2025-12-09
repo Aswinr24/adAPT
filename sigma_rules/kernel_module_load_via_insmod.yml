@@ -1,0 +1,54 @@
+title: Kernel Module Load via insmod
+id: 2339f03c-f53f-40fa-834b-40c5983fc41f
+status: stable
+description: Detects the use of the insmod binary to load a Linux kernel object file.
+  Threat actors can use this binary, given they have root privileges, to load a rootkit
+  on a system providing them with complete control and the ability to hide from security
+  products. Manually loading a kernel module in this manner should not be at all common
+  and can indicate suspcious or malicious behavior.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://decoded.avast.io/davidalvarez/linux-threat-hunting-syslogk-a-kernel-rootkit-found-under-development-in-the-wild/
+tags:
+- 'Tactic: Persistence'
+- attack.ta0003
+- 'Data Source: SentinelOne'
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Threat: Rootkit'
+- 'Data Source: Auditd Manager'
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Endgame'
+- attack.persistence
+- attack.t1547
+level: medium
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - endgame-*
+  - logs-auditd_manager.auditd-*
+  - logs-endpoint.events.process*
+  - logs-sentinel_one_cloud_funnel.*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"linux\" and event.type == \"start\"\
+      \ and process.name == \"insmod\" and process.args : \"*.ko\" and\nnot process.parent.executable\
+      \ like (\n  \"/opt/ds_agent/*\", \"/usr/sbin/veeamsnap-loader\", \"/opt/TrendMicro/vls_agent/*\"\
+      , \"/opt/intel/oneapi/*\",\n  \"/opt/commvault/Base/linux_drv\", \"/bin/falcoctl\"\
+      \n)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.type
+- host.os.type
+- process.args
+- process.name
+- process.parent.executable

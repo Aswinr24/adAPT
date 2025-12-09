@@ -1,0 +1,48 @@
+title: Rundll32 DLL Execution via PowerShell
+id: dfa7a86c-9277-4cb3-90cc-44ad626c669c
+status: stable
+description: 'Detects execution of rundll32.exe to load and execute a DLL via PowerShell
+  Start-Process. This technique is commonly
+
+  used by APT28 and other threat actors to execute malicious DLLs while evading detection
+  by leveraging a legitimate
+
+  Windows binary. The rule specifically looks for rundll32 execution patterns in PowerShell
+  script blocks.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.t1218
+- attack.defense_evasion
+- Windows
+- MITRE
+- attack.ta0002
+- Execution
+- attack.ta0005
+- attack.t1059
+- attack.execution
+- APT28
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and\n(\n  (event.code : \"4104\" and powershell.file.script_block_text\
+      \ : *Start-Process* and powershell.file.script_block_text : *rundll32*) or\n\
+      \  (event.category:process and process.command_line : *Start-Process* and process.command_line\
+      \ : *rundll32*) or\n  (event.category:process and process.name : \"rundll32.exe\"\
+      \ and process.args : *.dll* and \n    not process.args : (*shell32.dll* or *user32.dll*\
+      \ or *kernel32.dll* or *PcaSvc.dll* or *setupapi.dll* or *printui.dll* or *advapi32.dll*\
+      \ or *dfshim.dll* or *comctl32.dll* or *prncache.dll* or *inetcpl.cpl* or *desk.cpl*)\
+      \ and\n    not process.executable : \"C:\\\\Windows\\\\System32\\\\rundll32.exe\"\
+      \ and\n    not user.name : \"SYSTEM\"\n  )\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

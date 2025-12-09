@@ -1,0 +1,68 @@
+title: Boot File Copy
+id: 5bda8597-69a6-4b9e-87a2-69a7c963ea83
+status: stable
+description: This rule detects the process of copying or moving files from or to the
+  `/boot` directory on Linux systems. The `/boot` directory contains files that are
+  essential for the system to boot, such as the kernel and initramfs images. Attackers
+  may copy or move files to the `/boot` directory to modify the boot process, which
+  can be leveraged to maintain access to the system.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references: []
+tags:
+- attack.t1574
+- 'Data Source: SentinelOne'
+- 'Data Source: Auditd Manager'
+- 'Domain: Endpoint'
+- attack.defense_evasion
+- attack.t1543
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- attack.ta0005
+- 'Tactic: Persistence'
+- attack.t1542
+- 'Data Source: Elastic Defend'
+- attack.t1059
+- attack.execution
+- attack.ta0003
+- 'Data Source: Crowdstrike'
+- attack.ta0002
+- 'Resources: Investigation Guide'
+- 'Data Source: Elastic Endgame'
+- attack.persistence
+level: low
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - logs-endpoint.events.process*
+  - endgame-*
+  - auditbeat-*
+  - logs-auditd_manager.auditd-*
+  - logs-crowdstrike.fdr*
+  - logs-sentinel_one_cloud_funnel.*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"linux\" and event.type == \"start\"\
+      \ and\nevent.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\"\
+      , \"executed\") and\nprocess.name in (\"cp\", \"mv\") and process.parent.executable\
+      \ != null and process.args like~ \"/boot/*\" and not (\n  process.parent.name\
+      \ in (\"update-initramfs\", \"dracut\", \"grub-mkconfig\", \"shim-install\"\
+      , \"sudo\", \"activate-theme\", \"update-grub-gfxpayload\", \"grub-pc.postinst\"\
+      ) or\n  process.parent.executable like~ (\"/usr/lib/kernel/install.d/*\", \"\
+      /tmp/newroot/*\", \"/var/lib/dpkg/info/*\") or\n  process.parent.args like~\
+      \ (\"/usr/bin/mkinitcpio\", \"/var/tmp/rpm-tmp.*\")\n)\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- event.type
+- host.os.type
+- process.args
+- process.name
+- process.parent.args
+- process.parent.executable
+- process.parent.name

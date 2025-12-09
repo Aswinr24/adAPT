@@ -1,0 +1,40 @@
+title: Hidden Files and Directories via Attrib
+id: 2972cad9-a409-456f-950f-fea01417b131
+status: stable
+description: 'Detects creation of hidden files and directories using attrib.exe (+h
+  flag) or PowerShell attributes modification.
+
+  APT36 uses this technique to hide malware and artifacts from user view. Monitors
+  for attrib.exe execution with +h or +s flags,
+
+  and PowerShell Set-ItemProperty operations targeting file attributes.'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.defense_evasion
+- attack.t1564
+- Windows
+- MITRE
+- attack.ta0005
+- APT36
+level: medium
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - "host.os.type:windows and event.code:(1 or 4104) and\n(\n  (process.name:attrib.exe\
+      \ and process.command_line:(*+h* or *+s*)) or\n  \n  (event.code:4104 and powershell.file.script_block_text:*Set-ItemProperty*\
+      \ and \n   powershell.file.script_block_text:*attributes* and \n   (powershell.file.script_block_text:*Hidden*\
+      \ or powershell.file.script_block_text:*System*)) or\n  \n  (event.code:4104\
+      \ and powershell.file.script_block_text:*Get-Item* and \n   powershell.file.script_block_text:*-Force*\
+      \ and\n   powershell.file.script_block_text:*attributes*)\n)"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

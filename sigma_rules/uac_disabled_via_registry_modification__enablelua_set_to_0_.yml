@@ -1,0 +1,41 @@
+title: UAC Disabled via Registry Modification (EnableLUA Set to 0)
+id: bf3ad3dc-b962-419c-9cf2-35bcbde1dee1
+status: stable
+description: 'This rule detects attempts to disable User Account Control (UAC) by
+  setting the registry value EnableLUA to 0 under:
+
+
+  HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System'
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0004
+- Windows
+- MITRE
+- attack.t1548
+- attack.privilege_escalation
+- Kill_chain
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - 'host.os.type:"windows" and
+
+      process.command_line: *EnableLUA* and
+
+      process.command_line: *Value* and
+
+      process.command_line: *0*
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

@@ -1,0 +1,36 @@
+title: VPN or Proxy Client Installation
+id: 5f234aaf-2ed4-4c9e-b526-8def7abd4971
+status: stable
+description: Detects installation of VPN/proxy tools that may indicate infrastructure
+  preparation (Acquire Infrastructure - T1583)
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- attack.ta0042
+- attack.t1583
+- MITRE
+- attack.resource_development
+level: low
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - winlogbeat-*
+  - auditbeat-*
+detection:
+  selection:
+    keywords:
+    - "event.type: \"start\" AND\n(\n  process.name: (\n    \"openvpn\" OR \"wireguard\"\
+      \ OR \"tor\" OR \"proxychains\" OR\n    \"proxychains4\" OR \"openvpn.exe\"\
+      \ OR \"wireguard.exe\"\n  )\n  OR\n  process.command_line: (\n    \"*install*vpn*\"\
+      \ OR \"*install*proxy*\" OR \"*install*tor*\" OR \"*install*privoxy*\" OR \"\
+      *install*shadowsocks*\" OR \"*install*v2ray*\" OR\n    \"*setup*vpn*\"   OR\
+      \ \"*setup*proxy*\"   OR \"*setup*tor*\"   OR \"*setup*privoxy*\"   OR \"*setup*shadowsocks*\"\
+      \   OR \"*setup*v2ray*\"\n  )\n) AND\nNOT process.parent.name: (\"apt\" OR \"\
+      yum\" OR \"dnf\" OR \"zypper\" OR \"msiexec.exe\")\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

@@ -1,0 +1,41 @@
+title: Threat Intel Hash Indicator Match
+id: aab184d3-72b3-4639-b242-6597c99d8bca
+status: stable
+description: This rule is triggered when a hash indicator from the Threat Intel Filebeat
+  module or integrations has a match against an event that contains file hashes, such
+  as antivirus alerts, process creation, library load, and file operation events.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-threatintel.html
+- https://www.elastic.co/guide/en/security/current/es-threat-intel-integrations.html
+- https://www.elastic.co/security/tip
+tags:
+- 'Rule Type: Threat Match'
+- 'Data Source: Elastic Endgame'
+- 'Resources: Investigation Guide'
+- 'OS: Windows'
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - auditbeat-*
+  - endgame-*
+  - filebeat-*
+  - logs-*
+  - winlogbeat-*
+detection:
+  selection:
+    threat_match_query: 'file.hash.*:* or process.hash.*:* or dll.hash.*:*
+
+      '
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- dll.hash.*
+- file.hash.*
+- process.hash.*

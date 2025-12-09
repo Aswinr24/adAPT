@@ -1,0 +1,39 @@
+title: Successful SSH Authentication from Unusual IP Address
+id: 5c495612-9992-49a7-afe3-0f647671fb60
+status: stable
+description: This rule leverages the new_terms rule type to detect successful SSH
+  authentications by an IP- address that has not been authenticated in the last 10
+  days. This behavior may indicate an attacker attempting to gain access to the system
+  using a valid account.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- 'Tactic: Initial Access'
+- attack.ta0001
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.initial_access
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- attack.t1078
+level: low
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - logs-system.auth-*
+  - filebeat-*
+detection:
+  selection: {}
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- event.category
+- event.outcome
+- host.os.type

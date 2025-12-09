@@ -1,0 +1,59 @@
+title: Volume Shadow Copy Deletion via WMIC
+id: dc9c1f74-dac3-48e3-b47f-eb79db358f57
+status: stable
+description: Identifies use of wmic.exe for shadow copy deletion on endpoints. This
+  commonly occurs in tandem with ransomware or other destructive attacks.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references: []
+tags:
+- attack.ta0040
+- 'Tactic: Impact'
+- 'Tactic: Execution'
+- 'OS: Windows'
+- 'Data Source: SentinelOne'
+- 'Domain: Endpoint'
+- attack.t1490
+- attack.t1047
+- 'Use Case: Threat Detection'
+- 'Data Source: Microsoft Defender for Endpoint'
+- 'Data Source: Windows Security Event Logs'
+- 'Data Source: Elastic Defend'
+- attack.execution
+- 'Data Source: Crowdstrike'
+- attack.impact
+- attack.ta0002
+- 'Resources: Investigation Guide'
+- 'Data Source: Elastic Endgame'
+- 'Data Source: Sysmon'
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - endgame-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process-*
+  - logs-m365_defender.event-*
+  - logs-sentinel_one_cloud_funnel.*
+  - logs-system.security*
+  - logs-windows.forwarded*
+  - logs-windows.sysmon_operational-*
+  - winlogbeat-*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"windows\" and event.type == \"start\"\
+      \ and\n  (process.name : \"WMIC.exe\" or ?process.pe.original_file_name == \"\
+      wmic.exe\") and\n  process.args : \"delete\" and process.args : \"shadowcopy\"\
+      \n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.type
+- host.os.type
+- process.args
+- process.name
+- process.pe.original_file_name

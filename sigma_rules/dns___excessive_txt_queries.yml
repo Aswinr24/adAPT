@@ -1,0 +1,26 @@
+title: DNS → Excessive TXT Queries
+id: 85acf2b6-d48f-4a87-bc13-b702849ca56c
+status: stable
+description: 'Detects hosts performing excessive TXT DNS queries, a common technique
+  used for DNS tunneling. Investigate the host and block outbound DNS if needed.
+
+  '
+author: []
+date: '2025-12-09'
+modified: '2025-12-09'
+references: []
+tags: []
+level: high
+logsource:
+  category: unknown
+  product: linux
+  index:
+  - auditbeat-*
+  - zeek-*
+detection:
+  selection:
+    threshold_query: 'event.dataset: "zeek.dns" and dns.question.type: "TXT"'
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

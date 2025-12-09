@@ -1,0 +1,59 @@
+title: Potential Unauthorized Access via Wildcard Injection Detected
+id: 4a99ac6f-9a54-4ba5-a64f-6eb65695841b
+status: stable
+description: This rule monitors for the execution of the "chown" and "chmod" commands
+  with command line flags that could indicate a wildcard injection attack. Linux wildcard
+  injection is a type of security vulnerability where attackers manipulate commands
+  or input containing wildcards (e.g., *, ?, []) to execute unintended operations
+  or access sensitive data by tricking the system into interpreting the wildcard characters
+  in unexpected ways.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references:
+- https://www.exploit-db.com/papers/33930
+tags:
+- attack.t1068
+- attack.ta0006
+- 'Tactic: Credential Access'
+- 'Tactic: Privilege Escalation'
+- attack.ta0004
+- attack.credential_access
+- 'Data Source: Crowdstrike'
+- 'Data Source: SentinelOne'
+- 'OS: Linux'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- attack.t1003
+- 'Data Source: Auditd Manager'
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Endgame'
+- attack.privilege_escalation
+level: low
+logsource:
+  category: process_creation
+  product: linux
+  index:
+  - auditbeat-*
+  - endgame-*
+  - logs-auditd_manager.auditd-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process*
+  - logs-sentinel_one_cloud_funnel.*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"linux\" and event.type == \"start\"\
+      \ and\n  event.action in (\"exec\", \"exec_event\", \"start\", \"ProcessRollup2\"\
+      , \"executed\", \"process_started\") and\n  process.name in (\"chown\", \"chmod\"\
+      ) and process.args == \"-R\" and process.args : \"--reference=*\"\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.action
+- event.type
+- host.os.type
+- process.args
+- process.name

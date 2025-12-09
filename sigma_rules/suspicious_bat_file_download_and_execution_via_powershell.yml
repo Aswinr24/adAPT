@@ -1,0 +1,38 @@
+title: Suspicious BAT File Download and Execution via PowerShell
+id: 0d878853-425a-46db-8dee-f210d53dc1cc
+status: stable
+description: Detects PowerShell downloading a BAT file to the TEMP directory and immediately
+  executing it, a technique commonly associated with ClickFix social engineering campaigns.
+  Attackers use this method to trick users into executing malicious batch scripts
+  that appear to be legitimate troubleshooting solutions. This behavior is highly
+  suspicious as legitimate administrative scripts rarely combine web downloads with
+  immediate batch file execution in TEMP directories.
+author: []
+date: '2025-12-09'
+modified: '2025-12-08'
+references: []
+tags:
+- Windows
+- MITRE
+- attack.ta0002
+- attack.execution
+- APT36
+- attack.t1204
+level: high
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - winlogbeat-*
+detection:
+  selection:
+    keywords:
+    - host.os.type:"windows" AND event.code:"600" AND process.command_line:(*Invoke-WebRequest*
+      OR *iwr*) AND process.command_line:(*-Uri* OR *-OutFile*) AND process.command_line:*-UseBasicParsing*
+      AND process.command_line:(*$env\:TEMP* OR *%TEMP%*) AND process.command_line:*.bat*
+      AND process.command_line:*Start-Process* AND process.command_line:(*-FilePath*
+      OR *-PassThru*)
+  condition: selection
+falsepositives:
+- Unknown
+fields: []

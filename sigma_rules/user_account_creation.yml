@@ -1,0 +1,55 @@
+title: User Account Creation
+id: 1aa9181a-492b-4c01-8b16-fa0735786b2b
+status: stable
+description: Identifies attempts to create new users. This is sometimes done by attackers
+  to increase access or establish persistence on a system or domain.
+author:
+- Elastic
+date: '2025-12-09'
+modified: '2025-12-05'
+references: []
+tags:
+- 'Data Source: Windows Security Event Logs'
+- 'Tactic: Persistence'
+- attack.ta0003
+- attack.persistence
+- 'OS: Windows'
+- 'Data Source: Crowdstrike'
+- 'Data Source: SentinelOne'
+- 'Use Case: Threat Detection'
+- 'Resources: Investigation Guide'
+- 'Data Source: Microsoft Defender for Endpoint'
+- 'Data Source: Elastic Defend'
+- 'Domain: Endpoint'
+- 'Data Source: Elastic Endgame'
+- 'Data Source: Sysmon'
+- attack.t1136
+level: low
+logsource:
+  category: process_creation
+  product: windows
+  index:
+  - endgame-*
+  - logs-crowdstrike.fdr*
+  - logs-endpoint.events.process-*
+  - logs-m365_defender.event-*
+  - logs-sentinel_one_cloud_funnel.*
+  - logs-system.security*
+  - logs-windows.forwarded*
+  - logs-windows.sysmon_operational-*
+  - winlogbeat-*
+detection:
+  selection:
+    eql_query: "process where host.os.type == \"windows\" and event.type == \"start\"\
+      \ and\n  (process.name : (\"net.exe\", \"net1.exe\") and not process.parent.name\
+      \ : \"net.exe\") and\n  (process.args : \"user\" and process.args : (\"/ad\"\
+      , \"/add\"))\n"
+  condition: selection
+falsepositives:
+- Unknown
+fields:
+- event.type
+- host.os.type
+- process.args
+- process.name
+- process.parent.name
