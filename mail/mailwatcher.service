@@ -1,0 +1,15 @@
+[Unit]
+Description=Mail Watcher - Phishing Detector
+After=network.target
+
+[Service]
+Type=simple
+User=mail
+Group=mail
+WorkingDirectory=/opt/phishing-detector
+ExecStart=/opt/phishing-detector/venv/bin/python /opt/phishing-detector/mail_watcher.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
