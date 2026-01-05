@@ -1,44 +1,84 @@
-# adAPT — ELK Threat Rules for APT Detection
+# adAPT — Adaptive Detection for Advanced Persistent Threats (APTs)
 
-This repository contains reference artifacts for building threat detection rules in the ELK stack (Elasticsearch, Logstash, Kibana) focused on Advanced Persistent Threat (APT) behaviors. The goal is to provide example configs, detection rule templates, sample event data and a small test harness so you can import, test and iterate on rules in your own ELK environment.
+A complete threat detection setup for the ELK stack (Elasticsearch, Logstash, Kibana) focused on Advanced Persistent Threat (APT) behaviors and phishing detection. Includes 100+ detection rules, Beats configurations, Logstash pipelines, and a machine learning-based phishing detection system for email log analysis.
 
-Summary of contents
+---
 
-- `docs/` — architecture notes, MITRE ATT&CK mapping and runbook.
-- `configs/` — example Beats and Logstash pipeline configs to ingest Windows/endpoint logs.
-- `detections/` — example detection rules (ElastAlert YAML + JSON/NDJSON skeletons for Kibana/Elastic SIEM detections).
-- `samples/` — small, safe sample events you can ingest to test rules.
-- `tools/` — helper scripts (Python) to bulk-index sample events into Elasticsearch for testing.
+## Project Structure
 
-How to use
-
-1. Prepare your environment (ELK and a Windows endpoint or log generator). This repo intentionally contains examples — not a full automated installer. See `docs/ARCHITECTURE.md` and `README.md` for manual setup steps.
-2. Place Beats configs on the host(s) you want to ship logs from (e.g., `configs/beats/winlogbeat.yml`).
-3. Drop `configs/logstash/pipeline.conf` into your Logstash `pipeline` directory and adjust the Elasticsearch output and credentials.
-4. Import rules/detections in `detections/` into ElastAlert or the Kibana Detection Engine as appropriate.
-5. Use `tools/ingest_sample.py` to index `samples/sample_events.json` into Elasticsearch and validate rule firing.
-
-Running the quick test harness
-
-1. Install python dependencies:
-
-```bash
-python3 -m pip install -r requirements.txt
+```
+adapt/
+├── sigma_rules/          # Detection rules for Elastic Security (KQL & EQL)
+├── elasticsearch/        # Elasticsearch configuration
+├── kibana/               # Kibana configuration
+├── logstash/             # Logstash ingest pipeline configs
+├── filebeat/             # Filebeat configuration
+├── auditbeat/            # Auditbeat configuration
+├── winlogbeat/           # Winlogbeat configuration
+├── mail/                 # Mail log ingestion with ML phishing scoring
+├── ML/                   # Phishing detection ML model & datasets
+└── docs/                 # Architecture & setup documentation
 ```
 
-2. Index sample events:
+---
 
-```bash
-python3 tools/ingest_sample.py
-```
+## Directory Details
 
-3. Run the detection checker (prints hit counts per detection):
+### `sigma_rules/`
+Contains 100+ detection rules for Elastic Security (Kibana Detection Engine) written in **KQL** and **EQL** formats. Coverage includes:
+- APT-36 attack chain detection
+- PowerShell abuse and encoded command execution
+- Credential dumping and lateral movement
+- Privilege escalation techniques
+- DNS tunneling and exfiltration
+- SSH brute force and password spraying
+- Phishing email detection (integrated with ML model)
+- Threat intelligence indicator matching (hashes, IPs, JA3 fingerprints)
+- MITRE ATT&CK technique coverage (T1003, T1059, T1021, T1078, etc.)
 
-```bash
-python3 tools/check_detections.py
-```
+### `elasticsearch/`
+Elasticsearch node configuration (`elasticsearch.yml`) for the cluster setup.
 
-Notes and disclaimers
+### `kibana/`
+Kibana configuration (`kibana.yml`) for the Security/SIEM interface.
 
-- This repository contains only safe, synthetic example events — no malware, no exploits.
-- You must adapt paths, hostnames, and credentials to your environment before using these configs.
+### `logstash/`
+Logstash ingest pipeline configurations for log parsing, ECS normalization, GeoIP enrichment, and Elasticsearch output.
+
+### `filebeat/`
+Filebeat configuration (`filebeat.yml`) for shipping logs from Linux endpoints.
+
+### `auditbeat/`
+Auditbeat configuration (`auditbeat.yml`) for system audit and file integrity monitoring.
+
+### `winlogbeat/`
+Winlogbeat configuration for shipping Windows Event Logs (Sysmon, Security, PowerShell).
+
+### `mail/`
+Scripts and configs for ingesting mail logs into ELK, with ML-based phishing detection that appends phishing scores and labels to email events.
+
+### `ML/`
+Training datasets and DistilBERT-based phishing detection model for classifying emails as legitimate or phishing.
+
+### `docs/`
+Project documentation:
+- `ARCHITECTURE.md` — System architecture, data sources, rule mapping and component overview
+- `SETUP.md` — Detailed setup and deployment guide
+
+---
+
+## Key Features
+
+- **100+ Detection Rules** — Comprehensive coverage of APT tactics and techniques in KQL/EQL
+- **ECS Compliance** — All logs normalized to Elastic Common Schema
+- **ML Phishing Detection** — DistilBERT-based model for real-time email classification
+- **Threat Intelligence Integration** — Rules for matching against known IOCs
+- **Multi-Platform Support** — Windows (Winlogbeat), Linux (Filebeat/Auditbeat), and network devices
+
+---
+
+## Notes
+
+- Adapt paths, hostnames, and credentials in configuration files to your environment
+- See `docs/SETUP.md` for detailed deployment instructions
+- See `docs/ARCHITECTURE.md` for system design and data flow documentation
