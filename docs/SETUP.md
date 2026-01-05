@@ -1,19 +1,15 @@
 # Setup Guide
 
-This document provides step-by-step instructions for deploying the adAPT threat detection environment.
-
----
-
 ## Prerequisites
 
 - **Proxmox VE** hypervisor (or equivalent virtualization platform)
 - VMs with the following specifications:
-  - **ELK Server**: Ubuntu Server 24.04, 8GB+ RAM, 100GB+ storage
+  - **ELK Server**: Ubuntu Server 24.04, 6GB+ RAM, 100GB+ storage
   - **Windows 10 Pro**: 4GB+ RAM
   - **Windows Server 22H2**: 4GB+ RAM
   - **Ubuntu Server 24.04**: 2GB+ RAM (log source + Zeek)
   - **Mail Server**: 2GB+ RAM
-  - **pfSense**: 1GB+ RAM (firewall/gateway)
+  - **pfSense**: 2GB+ RAM (firewall/gateway)
 
 ---
 
